@@ -12,6 +12,6 @@ parameters:
 		text: "This is example of static text"
 
 	database:
-		driver: pdo_pgsql
-		port: 5432
+		driver: pdo_mysql
+		port: 3306
 		serverVersion: null

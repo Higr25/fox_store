@@ -46,8 +46,7 @@ nettrine.orm.cache:
 nettrine.migrations:
 	table: doctrine_migrations
 	column: version
-	directories:
-		migrations: %rootDir%/db/Migrations
+	directories: rootDir%/db/Migrations
 #	namespace: Database\Migrations
 	versionsOrganization: null
 

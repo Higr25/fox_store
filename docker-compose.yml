@@ -22,15 +22,14 @@ services:
     volumes:
       - ./:/var/www/html:cached
     depends_on:
-      mariadb:
-        condition: service_healthy
+      - mariadb
     environment:
       NETTE_DEBUG: 1
       PHP_EXTENSION_XDEBUG: 1
       PHP_EXTENSION_PGSQL: 1
       PHP_EXTENSION_PDO_PGSQL: 1
       PHP_EXTENSION_MYSQLI: 1
-      STARTUP_COMMAND_1: composer install
+#      STARTUP_COMMAND_1: composer install
 #      STARTUP_COMMAND_2: NETTE_DEBUG=1 php bin/console migrations:migrate --no-interaction
 #      STARTUP_COMMAND_3: NETTE_DEBUG=1 php bin/console doctrine:fixtures:load --no-interaction
 
@@ -42,12 +41,10 @@ services:
       - MARIADB_USER=contributte
       - MARIADB_DATABASE=contributte
     volumes:
-      - .docker/data/mysql:/var/lib/mysql
+      - ./db/entrypoint:/docker-entrypoint-initdb.d
+#      - .docker/data/mysql:/var/lib/mysql
     ports:
       - 3306:3306
-    healthcheck:
-      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost", "--silent" ]
-      interval: 3s
-      retries: 5
-      start_period: 5s
-      timeout: 3s
+
+volumes:
+  db_data: {}
