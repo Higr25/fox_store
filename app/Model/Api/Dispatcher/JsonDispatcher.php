@@ -58,8 +58,8 @@ class JsonDispatcher extends ApitteJsonDispatcher
 			}
 
 			$response = $response->withStatus($e->getCode() !== 0 ? $e->getCode() : 500)
-				->withHeader('Content-Type', 'application/json');
-			$response->getBody()->write(Json::encode($data));
+				->withHeader('Content-Type', 'application/json; charset=utf-8');
+			$response->getBody()->write(Json::encode($data, true, true));
 		} catch (Throwable $e) {
 			throw $e;
 		}
@@ -125,7 +125,7 @@ class JsonDispatcher extends ApitteJsonDispatcher
 	protected function transformResponse(mixed $data, ApiResponse $response): ApiResponse
 	{
 		$response = $response->withStatus(200)
-			->withHeader('Content-Type', 'application/json');
+			->withHeader('Content-Type', 'application/json; charset=utf-8');
 
 		// Serialize entity with symfony/serializer to JSON
 		$serialized = $this->serializer->serialize($data, 'json');

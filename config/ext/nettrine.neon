@@ -14,7 +14,7 @@ extensions:
 	nettrine.orm.console: Nettrine\ORM\DI\OrmConsoleExtension(%consoleMode%)
 	nettrine.orm.annotations: Nettrine\ORM\DI\OrmAnnotationsExtension
 
-	nettrine.migrations: Nettrine\Migrations\DI\MigrationsExtension
+#	nettrine.migrations: Nettrine\Migrations\DI\MigrationsExtension
 	nettrine.fixtures: Nettrine\Fixtures\DI\FixturesExtension
 	nettrine.cache: Nettrine\Cache\DI\CacheExtension
 
@@ -31,6 +31,7 @@ nettrine.dbal:
 		dbname: %database.dbname%
 		port: %database.port%
 		serverVersion: %database.serverVersion%
+		charset: utf8mb4
 
 nettrine.orm:
 	entityManagerDecoratorClass: App\Model\Database\EntityManagerDecorator
@@ -43,12 +44,12 @@ nettrine.orm.annotations:
 
 nettrine.orm.cache:
 
-nettrine.migrations:
-	table: doctrine_migrations
-	column: version
-	directories: rootDir%/db/Migrations
+#nettrine.migrations:
+#	table: doctrine_migrations
+#	column: version
+#	directories: rootDir%/db/Migrations
 #	namespace: Database\Migrations
-	versionsOrganization: null
+#	versionsOrganization: null
 
 nettrine.fixtures:
 	paths:

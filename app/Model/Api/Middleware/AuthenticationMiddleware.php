@@ -30,7 +30,7 @@ class AuthenticationMiddleware implements IMiddleware
 		]));
 
 		return $response
-			->withHeader('Content-Type', 'application/json')
+			->withHeader('Content-Type', 'application/json; charset=utf-8')
 			->withStatus(401);
 	}
 

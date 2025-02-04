@@ -1,0 +1,9 @@
+parameters:
+    database:
+        driver: pdo_mysql
+        host: mariadb
+        port: 3306
+        dbname: contributte
+        user: contributte
+        password: contributte
+        serverVersion: null

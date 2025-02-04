@@ -1,0 +1,62 @@
+{
+  "name": "contributte/utils",
+  "description": "Extra contrib to nette/utils",
+  "keywords": [
+    "nette",
+    "utils",
+    "strings",
+    "filesystem",
+    "datetime"
+  ],
+  "type": "library",
+  "license": "MIT",
+  "homepage": "https://github.com/contributte/utils",
+  "authors": [
+    {
+      "name": "Milan Felix Šulc",
+      "homepage": "https://f3l1x.io"
+    }
+  ],
+  "require": {
+    "php": ">=8.0",
+    "nette/utils": "^3.2.9 || ^4.0.0"
+  },
+  "require-dev": {
+    "nette/di": "^3.1.0",
+    "ninjify/nunjuck": "^0.4.0",
+    "ninjify/qa": "^0.12.0",
+    "phpstan/phpstan": "^1.9.0",
+    "phpstan/phpstan-deprecation-rules": "^1.1.0",
+    "phpstan/phpstan-nette": "^1.2.0",
+    "phpstan/phpstan-strict-rules": "^1.4.0"
+  },
+  "suggest": {
+    "nette/di": "to use DateTimeExtension[CompilerExtension]"
+  },
+  "conflict": {
+    "nette/di": "<3.0.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "Contributte\\Utils\\": "src"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Tests\\": "tests"
+    }
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true,
+  "config": {
+    "sort-packages": true,
+    "allow-plugins": {
+      "dealerdirect/phpcodesniffer-composer-installer": true
+    }
+  },
+  "extra": {
+    "branch-alias": {
+      "dev-master": "0.6.x-dev"
+    }
+  }
+}

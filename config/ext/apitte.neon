@@ -41,11 +41,6 @@ services:
 	middleware.cors:
 		factory: App\Model\Api\Middleware\CORSMiddleware
 		tags: [middleware: [priority: 200]]
-	middleware.authenticator:
-		factory: App\Model\Api\Middleware\AuthenticationMiddleware(
-			App\Model\Api\Security\TokenAuthenticator()
-		)
-		tags: [middleware: [priority: 250]]
 
 	api.core.dispatcher: App\Model\Api\Dispatcher\JsonDispatcher
 	api.core.errorHandler: App\Model\Api\ErrorHandler\ThrowingErrorHandler

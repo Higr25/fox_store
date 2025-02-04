@@ -9,11 +9,11 @@ trait TCreatedAt
 {
 
 	/** @ORM\Column(type="datetime", nullable=FALSE) */
-	protected DateTime $createdAt;
+	protected DateTime $created_at;
 
 	public function getCreatedAt(): DateTime
 	{
-		return $this->createdAt;
+		return $this->created_at;
 	}
 
 	/**
@@ -24,7 +24,7 @@ trait TCreatedAt
 	 */
 	public function setCreatedAt(): void
 	{
-		$this->createdAt = new DateTime();
+		$this->created_at = new DateTime();
 	}
 
 }

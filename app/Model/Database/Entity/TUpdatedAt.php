@@ -12,11 +12,11 @@ trait TUpdatedAt
 	 * @var DateTime|NULL
 	 * @ORM\Column(type="datetime", nullable=TRUE)
 	 */
-	protected ?DateTime $updatedAt = null;
+	protected ?DateTime $updated_at = null;
 
 	public function getUpdatedAt(): ?DateTime
 	{
-		return $this->updatedAt;
+		return $this->updated_at;
 	}
 
 	/**
@@ -27,7 +27,7 @@ trait TUpdatedAt
 	 */
 	public function setUpdatedAt(): void
 	{
-		$this->updatedAt = new DateTime();
+		$this->updated_at = new DateTime();
 	}
 
 }
