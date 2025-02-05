@@ -2,20 +2,11 @@
 
 namespace App\Domain\Api\Facade;
 
-use App\Domain\Api\Request\CreateProductReqDto;
-use App\Domain\Api\Request\CreateUserReqDto;
-use App\Domain\Api\Request\ProductPriceChangeReqDto;
-use App\Domain\Api\Request\UpdateProductReqDto;
 use App\Domain\Api\Response\ProductPriceChangeResDto;
-use App\Domain\Api\Response\ProductResDto;
-use App\Domain\Api\Response\UserResDto;
 use App\Domain\Product\Product;
 use App\Domain\ProductPriceChange\ProductPriceChange;
-use App\Domain\User\User;
 use App\Model\Database\EntityManagerDecorator;
 use App\Model\Exception\Runtime\Database\EntityNotFoundException;
-use App\Model\Security\Passwords;
-use Doctrine\Common\Collections\Criteria;
 
 final class ProductsPriceChangeFacade
 {
@@ -55,18 +46,17 @@ final class ProductsPriceChangeFacade
 
 		return ProductPriceChangeResDto::from($entity);
 	}
-	
-	public function create(ProductPriceChangeReqDto $dto): void
+
+	public function logChange(int $productId, float $oldPrice, float $newPrice): void
 	{
-		$entity = $this->em->getRepository(Product::class)->findOneBy(['id' => $dto->product_id]);
-		
-		$product = new ProductPriceChange(
-			$entity,
-			$dto->old_price,
-			$dto->new_price,
+		$product = $this->em->getRepository(Product::class)->find($productId);
+		$productPriceChange = new ProductPriceChange(
+			$product,
+			$oldPrice,
+			$newPrice,
 		);
-		
-		$this->em->persist($product);
-		$this->em->flush($product);
+
+		$this->em->persist($productPriceChange);
+		$this->em->flush($productPriceChange);
 	}
 }

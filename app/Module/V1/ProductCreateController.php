@@ -9,7 +9,6 @@ use Apitte\Core\Http\ApiResponse;
 use App\Domain\Api\Facade\ProductsFacade;
 use App\Domain\Api\Facade\UsersFacade;
 use App\Domain\Api\Request\CreateProductReqDto;
-use App\Domain\Api\Request\CreateUserReqDto;
 use App\Domain\Api\Response\ProductResDto;
 use App\Domain\Api\Response\UserResDto;
 use App\Model\Utils\Caster;
@@ -41,10 +40,10 @@ class ProductCreateController extends BaseV1Controller
 	{
 		/** @var CreateProductReqDto $dto */
 		$dto = $request->getParsedBody();
-		
+
 		try {
 			$this->productsFacade->create($dto);
-			
+
 			return $response->withStatus(IResponse::S201_Created)
 				->withHeader('Content-Type', 'application/json; charset=utf-8');
 		} catch (DriverException $e) {

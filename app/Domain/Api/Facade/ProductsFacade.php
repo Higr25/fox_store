@@ -39,14 +39,6 @@ final class ProductsFacade
 	}
 
 	/**
-	 * @return ProductResDto[]
-	 */
-	public function findAll(int $limit = 10, int $offset = 0): array
-	{
-		return $this->findBy([], ['id' => 'ASC'], $limit, $offset);
-	}
-
-	/**
 	 * @param mixed[] $criteria
 	 * @param string[] $orderBy
 	 */
@@ -64,15 +56,15 @@ final class ProductsFacade
 	public function delete(int $id): void
 	{
 		$product = $this->em->getRepository(Product::class)->findOneBy(['id' => $id]);
-		
+
 		$this->em->remove($product);
 		$this->em->flush($product);
 	}
-	
+
 	public function update(int $id, UpdateProductReqDto $dto): void
 	{
 		$product = $this->em->getRepository(Product::class)->findOneBy(['id' => $id]);
-		
+
 		if ($dto->name) {
 			$product->setName($dto->name);
 		}
@@ -82,18 +74,18 @@ final class ProductsFacade
 		if ($dto->stock) {
 			$product->setStock($dto->stock);
 		}
-		
+
 		if ($dto->changeStock) {
 			$product->setStock($product->getStock() + $dto->changeStock);
 		}
-		
+
 		$this->em->persist($product);
 		$this->em->flush($product);
 	}
 
 	public function create(CreateProductReqDto $dto): void
 	{
-		$product = new Product(
+		$product = new Product( // use request object here
 			$dto->name,
 			$dto->price,
 			$dto->stock,

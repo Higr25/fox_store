@@ -2,7 +2,6 @@
 #
 services:
 	# Domain =================
-	- App\Domain\Api\Facade\UsersFacade
 	- App\Domain\Api\Facade\ProductsFacade
 	- App\Domain\Api\Facade\ProductsPriceChangeFacade
 

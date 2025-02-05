@@ -10,7 +10,9 @@ use DateTimeInterface;
  */
 final class DateTime extends ContributteDateTime
 {
-	
+
+	const FORMAT = 'Y-m-d\TH:i:s';
+
 	/**
 	 * Create a DateTime object from a query parameter.
 	 *
@@ -20,8 +22,8 @@ final class DateTime extends ContributteDateTime
 	public static function createFromQueryParam(?string $dateString): ?DateTimeInterface
 	{
 		return $dateString
-			? \DateTime::createFromFormat('Y-m-d\TH:i:s', $dateString) ?: null
+			? \DateTime::createFromFormat(self::FORMAT, $dateString) ?: null
 			: null;
 	}
-	
+
 }

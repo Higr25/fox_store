@@ -9,7 +9,6 @@ use Apitte\Core\Http\ApiResponse;
 use App\Domain\Api\Facade\ProductsFacade;
 use App\Domain\Api\Facade\UsersFacade;
 use App\Domain\Api\Request\CreateProductReqDto;
-use App\Domain\Api\Request\CreateUserReqDto;
 use App\Domain\Api\Response\ProductResDto;
 use App\Domain\Api\Response\UserResDto;
 use App\Model\Utils\Caster;
@@ -43,7 +42,7 @@ class ProductDeleteController extends BaseV1Controller
 	{
 		try {
 			$this->productsFacade->delete((int)$request->getParameter('id'));
-			
+
 			return $response->withStatus(IResponse::S204_NoContent)
 				->withHeader('Content-Type', 'application/json; charset=utf-8');
 		} catch (DriverException $e) {

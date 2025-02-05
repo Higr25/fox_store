@@ -37,7 +37,9 @@
         "symfony/cache": "^7.0.0",
         "codeception/codeception": "^5.1",
         "codeception/module-phpbrowser": "*",
-        "codeception/module-asserts": "*"
+        "codeception/module-asserts": "*",
+        "zircote/swagger-php": "^5.0",
+        "doctrine/annotations": "*"
     },
     "require-dev": {
         "contributte/qa": "^0.4",
@@ -53,12 +55,8 @@
         "psr-4": {
             "App\\": "app",
             "Database\\": "db",
-            "Tests\\": "tests"
-        }
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "Tests\\": "tests"
+            "Tests\\": "tests",
+            "OpenApi\\": "vendor/zircote/swagger-php/src/"
         }
     },
     "prefer-stable": true,

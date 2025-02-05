@@ -1,6 +1,6 @@
 DROP TABLE IF EXISTS `product`;
 CREATE TABLE `product` (
-   `id` INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+   `id` INT UNSIGNED PRIMARY KEY NOT NULL AUTO_INCREMENT,
    `name` VARCHAR(50) NOT NULL,
    `price` FLOAT(6,2) NOT NULL,
     `stock` INT NOT NULL,
@@ -11,7 +11,7 @@ CREATE TABLE `product` (
 
 DROP TABLE IF EXISTS `product_price_change`;
 CREATE TABLE `product_price_change` (
-    `id` INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    `id` INT UNSIGNED PRIMARY KEY NOT NULL AUTO_INCREMENT,
     `product_id` INT NOT NULL,
     `old_price` FLOAT(6,2) NOT NULL,
     `new_price` FLOAT(6,2) NOT NULL,
