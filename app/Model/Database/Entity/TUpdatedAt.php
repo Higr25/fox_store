@@ -8,13 +8,10 @@ use Doctrine\ORM\Mapping as ORM;
 trait TUpdatedAt
 {
 
-	/**
-	 * @var DateTime|NULL
-	 * @ORM\Column(type="datetime", nullable=TRUE)
-	 */
-	protected ?DateTime $updated_at = null;
+	/** @ORM\Column(type="datetime", nullable=FALSE) */
+	protected DateTime $updated_at;
 
-	public function getUpdatedAt(): ?DateTime
+	public function getUpdatedAt(): DateTime
 	{
 		return $this->updated_at;
 	}
@@ -22,7 +19,7 @@ trait TUpdatedAt
 	/**
 	 * Doctrine annotation
 	 *
-	 * @ORM\PreUpdate
+	 * @ORM\PrePersist
 	 * @internal
 	 */
 	public function setUpdatedAt(): void

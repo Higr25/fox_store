@@ -1,6 +1,6 @@
 <?php declare(strict_types = 1);
 
-namespace App\Module\PubV1;
+namespace App\Module;
 
 use Apitte\Core\Annotation\Controller as Apitte;
 use Apitte\Core\Http\ApiRequest;
@@ -12,7 +12,7 @@ use Psr\Http\Message\ResponseInterface;
  * @Apitte\Path("/openapi")
  * @Apitte\Tag("OpenApi")
  */
-class OpenApiController extends BasePubV1Controller
+class OpenApiController extends BaseController
 {
 
 	private ISchemaBuilder $schemaBuilder;
@@ -26,7 +26,7 @@ class OpenApiController extends BasePubV1Controller
 	 * @Apitte\OpenApi("
 	 *   summary: Get OpenAPI definition.
 	 * ")
-	 * @Apitte\Path("/meta")
+	 * @Apitte\Path("/schema")
 	 * @Apitte\Method("GET")
 	 */
 	public function meta(ApiRequest $request, ApiResponse $response): ResponseInterface

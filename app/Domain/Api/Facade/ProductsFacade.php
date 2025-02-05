@@ -4,6 +4,7 @@ namespace App\Domain\Api\Facade;
 
 use App\Domain\Api\Request\CreateProductReqDto;
 use App\Domain\Api\Request\CreateUserReqDto;
+use App\Domain\Api\Request\UpdateProductReqDto;
 use App\Domain\Api\Response\ProductResDto;
 use App\Domain\Api\Response\UserResDto;
 use App\Domain\Product\Product;
@@ -27,8 +28,6 @@ final class ProductsFacade
 	 */
 	public function findBy(array $criteria = [], ?array $orderBy = null, $limit = null, $offset = null): array
 	{
-//		var_dump($criteria);
-//		die();
 		$entities = $this->em->getRepository(Product::class)->findBy($criteria, $orderBy, $limit, $offset);
 		$result = [];
 
@@ -62,25 +61,46 @@ final class ProductsFacade
 		return ProductResDto::from($entity);
 	}
 
-	public function findOne(int $id): ProductResDto
+	public function delete(int $id): void
 	{
-		return $this->findOneBy(['id' => $id]);
+		$product = $this->em->getRepository(Product::class)->findOneBy(['id' => $id]);
+		
+		$this->em->remove($product);
+		$this->em->flush($product);
+	}
+	
+	public function update(int $id, UpdateProductReqDto $dto): void
+	{
+		$product = $this->em->getRepository(Product::class)->findOneBy(['id' => $id]);
+		
+		if ($dto->name) {
+			$product->setName($dto->name);
+		}
+		if ($dto->price) {
+			$product->setPrice($dto->price);
+		}
+		if ($dto->stock) {
+			$product->setStock($dto->stock);
+		}
+		
+		if ($dto->changeStock) {
+			$product->setStock($product->getStock() + $dto->changeStock);
+		}
+		
+		$this->em->persist($product);
+		$this->em->flush($product);
 	}
 
-	public function create(CreateProductReqDto $dto): Product
+	public function create(CreateProductReqDto $dto): void
 	{
-		$user = new Product(
+		$product = new Product(
 			$dto->name,
 			$dto->price,
 			$dto->stock,
-			$dto->created_at,
-			$dto->updated_at,
 		);
 
-		$this->em->persist($user);
-		$this->em->flush($user);
-
-		return $user;
+		$this->em->persist($product);
+		$this->em->flush($product);
 	}
 
 }

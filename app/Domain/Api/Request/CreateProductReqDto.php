@@ -7,19 +7,22 @@ use Symfony\Component\Validator\Constraints as Assert;
 final class CreateProductReqDto
 {
 
-	/** @Assert\NotBlank */
+	/**
+	 * @Assert\NotBlank
+	 * @Assert\Length(max=50)
+	 */
 	public string $name;
 
-	/** @Assert\NotBlank */
+	/**
+	 * @Assert\NotBlank
+	 * @Assert\PositiveOrZero
+	 */
 	public float $price;
 
-	/** @Assert\NotBlank */
+	/**
+	 * @Assert\NotBlank
+	 * @Assert\PositiveOrZero
+	 */
 	public int $stock;
-
-	/** @Assert\NotBlank */
-	public \DateTime $created_at;
-
-	/** @Assert\NotBlank */
-	public \DateTime $updated_at;
 
 }

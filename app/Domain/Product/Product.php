@@ -30,13 +30,11 @@ class Product extends AbstractEntity
 	/** @ORM\Column(type="integer", length=10, nullable=FALSE, unique=FALSE) */
 	private int $stock;
 
-	public function __construct(string $name, float $price, int $stock, \DateTime $created_at, \DateTime $updated_at)
+	public function __construct(string $name, float $price, int $stock)
 	{
 		$this->name = $name;
 		$this->price = $price;
 		$this->stock = $stock;
-		$this->created_at = $created_at;
-		$this->updated_at = $updated_at;
 	}
 
 	public function getCreatedAt(): \DateTime
@@ -63,6 +61,21 @@ class Product extends AbstractEntity
 	{
 		return $this->stock;
 	}
+	
+	public function setName(string $name): void
+	{
+		$this->name = $name;
+	}
+	
+	public function setPrice(float $price): void
+	{
+		$this->price = $price;
+	}
+	
+	public function setStock(int $stock): void
+	{
+		$this->stock = $stock;
+	}
 
-
+	
 }

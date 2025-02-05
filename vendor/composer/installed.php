@@ -3,7 +3,7 @@
         'name' => 'contributte/apitte-skeleton',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => '138735316c1ee03e15daf89007bae4403efeef9b',
+        'reference' => '2e837cf569ff9edca039d22354b1a074586155bf',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -22,7 +22,7 @@
         'contributte/apitte-skeleton' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => '138735316c1ee03e15daf89007bae4403efeef9b',
+            'reference' => '2e837cf569ff9edca039d22354b1a074586155bf',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
