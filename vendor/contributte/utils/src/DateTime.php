@@ -18,7 +18,7 @@ class DateTime extends NetteDateTime
 	 * @param string|int|DateTimeInterface $time
 	 * @return static
 	 */
-	public static function from($time): self
+	public static function from($time): static
 	{
 		return parent::from($time);
 	}
@@ -26,7 +26,7 @@ class DateTime extends NetteDateTime
 	/**
 	 * @return static
 	 */
-	public function modifyClone(string $modify = ''): self
+	public function modifyClone(string $modify = ''): static
 	{
 		return parent::modifyClone($modify);
 	}

@@ -6,11 +6,8 @@ use Apitte\Core\Annotation\Controller as Apitte;
 use Apitte\Core\Http\ApiRequest;
 use App\Domain\Api\Facade\ProductsFacade;
 use App\Domain\Api\Facade\ProductsPriceChangeFacade;
-use App\Domain\Api\Facade\UsersFacade;
 use App\Domain\Api\Response\ProductResDto;
-use App\Domain\Api\Response\UserResDto;
-use App\Domain\ProductPriceChange\ProductPriceChange;
-use App\Model\Utils\Caster;
+use App\Model\Utils\DateTime;
 
 /**
  * @Apitte\Path("/products")
@@ -59,22 +56,12 @@ class ProductsController extends BaseV1Controller
 	 */
 	public function history(ApiRequest $request): array
 	{
-		$afterString = $request->getParameter('after')
-			? str_replace('T', ' ', $request->getParameter('after'))
-			: null;
-		
-		$beforeString = $request->getParameter('before')
-			? str_replace('T', ' ', $request->getParameter('before'))
-			: null;
-
 		$cleanParams = [
 			'product_id' => (int)$request->getParameter('product_id'),
-			'name' => $request->getParameter('name'),
-			'before' => \DateTime::createFromFormat('Y-m-d H:i:s', $beforeString ?? '') ?: null,
-			'after' => \DateTime::createFromFormat('Y-m-d H:i:s', $afterString ?? '') ?: null
+			'before' => DateTime::createFromQueryParam($request->getParameter('before') ?? ''),
+			'after' => DateTime::createFromQueryParam($request->getParameter('after') ?? ''),
 		];
-
-
+		
 		return $this->priceChangeFacade->findBy($cleanParams);
 	}
 
