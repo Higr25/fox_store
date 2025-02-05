@@ -6,22 +6,31 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\Cast;
 use PHPStan\Analyser\Scope;
 use PHPStan\Rules\Rule;
-use PHPStan\Rules\RuleError;
 use PHPStan\Rules\RuleErrorBuilder;
 use PHPStan\Type\ErrorType;
 use PHPStan\Type\GeneralizePrecision;
 use PHPStan\Type\VerbosityLevel;
 use function sprintf;
 
+/**
+ * @implements Rule<Cast>
+ */
 class UselessCastRule implements Rule
 {
 
 	/** @var bool */
 	private $treatPhpDocTypesAsCertain;
 
-	public function __construct(bool $treatPhpDocTypesAsCertain)
+	/** @var bool */
+	private $treatPhpDocTypesAsCertainTip;
+
+	public function __construct(
+		bool $treatPhpDocTypesAsCertain,
+		bool $treatPhpDocTypesAsCertainTip
+	)
 	{
 		$this->treatPhpDocTypesAsCertain = $treatPhpDocTypesAsCertain;
+		$this->treatPhpDocTypesAsCertainTip = $treatPhpDocTypesAsCertainTip;
 	}
 
 	public function getNodeType(): string
@@ -29,10 +38,6 @@ class UselessCastRule implements Rule
 		return Cast::class;
 	}
 
-	/**
-	 * @param Cast $node
-	 * @return RuleError[] errors
-	 */
 	public function processNode(Node $node, Scope $scope): array
 	{
 		$castType = $scope->getType($node);
@@ -57,14 +62,18 @@ class UselessCastRule implements Rule
 					return $ruleErrorBuilder;
 				}
 
-				return $ruleErrorBuilder->tip('Because the type is coming from a PHPDoc, you can turn off this check by setting <fg=cyan>treatPhpDocTypesAsCertain: false</> in your <fg=cyan>%configurationFile%</>.');
+				if (!$this->treatPhpDocTypesAsCertainTip) {
+					return $ruleErrorBuilder;
+				}
+
+				return $ruleErrorBuilder->treatPhpDocTypesAsCertainTip();
 			};
 			return [
 				$addTip(RuleErrorBuilder::message(sprintf(
 					'Casting to %s something that\'s already %s.',
 					$castType->describe(VerbosityLevel::typeOnly()),
 					$expressionType->describe(VerbosityLevel::typeOnly())
-				)))->build(),
+				)))->identifier('cast.useless')->build(),
 			];
 		}
 

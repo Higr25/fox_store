@@ -4,7 +4,7 @@
 
 	<!-- ################################################################### -->
 
-	<config name="php_version" value="80200"/>
+	<config name="php_version" value="80400"/>
 
 	<rule ref="./ruleset.xml"/>
 

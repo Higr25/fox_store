@@ -8,6 +8,8 @@ parameters:
 		- stubs/Application/Routers/RouteList.stub
 		- stubs/Application/UI/Component.stub
 		- stubs/Application/UI/Multiplier.stub
+		- stubs/Application/UI/Presenter.stub
+		- stubs/Caching/Cache.stub
 		- stubs/ComponentModel/Component.stub
 		- stubs/ComponentModel/Container.stub
 		- stubs/ComponentModel/IComponent.stub
@@ -21,6 +23,9 @@ parameters:
 		- stubs/Http/SessionSection.stub
 		- stubs/Routing/Router.stub
 		- stubs/Utils/ArrayHash.stub
+		- stubs/Utils/Arrays.stub
+		- stubs/Utils/Callback.stub
+		- stubs/Utils/Helpers.stub
 		- stubs/Utils/Html.stub
 		- stubs/Utils/Paginator.stub
 		- stubs/Utils/Random.stub
@@ -47,6 +52,14 @@ parameters:
 			- sendTemplate
 			- terminate
 			- forward
+
+conditionalTags:
+	PHPStan\Type\Nette\StringsMatchDynamicReturnTypeExtension:
+		phpstan.broker.dynamicStaticMethodReturnTypeExtension: %featureToggles.narrowPregMatches%
+	PHPStan\Type\Nette\StringsMatchAllDynamicReturnTypeExtension:
+		phpstan.broker.dynamicStaticMethodReturnTypeExtension: %featureToggles.narrowPregMatches%
+	PHPStan\Type\Nette\StringsReplaceCallbackClosureTypeExtension:
+		phpstan.staticMethodParameterClosureTypeExtension: %featureToggles.narrowPregMatches%
 
 services:
 	-
@@ -110,3 +123,12 @@ services:
 		class: PHPStan\Rule\Nette\PresenterInjectedPropertiesExtension
 		tags:
 			- phpstan.properties.readWriteExtension
+
+	-
+		class: PHPStan\Type\Nette\StringsMatchAllDynamicReturnTypeExtension
+
+	-
+		class: PHPStan\Type\Nette\StringsMatchDynamicReturnTypeExtension
+
+	-
+		class: PHPStan\Type\Nette\StringsReplaceCallbackClosureTypeExtension

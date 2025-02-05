@@ -4,10 +4,7 @@ namespace PHPStan\Type\Doctrine\Descriptors;
 
 use Doctrine\DBAL\Connection;
 use PHPStan\Doctrine\Driver\DriverDetector;
-use PHPStan\Type\Accessory\AccessoryNumericStringType;
 use PHPStan\Type\IntegerType;
-use PHPStan\Type\IntersectionType;
-use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeCombinator;
 use function in_array;
@@ -42,10 +39,7 @@ class FloatType implements DoctrineTypeDescriptor, DoctrineTypeDriverAwareDescri
 	{
 		return TypeCombinator::union(
 			new \PHPStan\Type\FloatType(),
-			new IntersectionType([
-				new StringType(),
-				new AccessoryNumericStringType(),
-			])
+			(new \PHPStan\Type\FloatType())->toString()
 		);
 	}
 
