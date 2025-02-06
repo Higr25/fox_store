@@ -11,6 +11,7 @@ use App\Domain\Api\Response\ProductResDto;
 use App\Model\Utils\DateTime;
 use App\Model\Utils\Validators;
 use OpenApi\Annotations\OpenApi as OA;
+use Tracy\ILogger;
 
 /**
  * @Apitte\Path("/products")
@@ -21,7 +22,7 @@ class ProductsController extends BaseV1Controller
 
 	public function __construct(
 		private ProductsFacade $productsFacade,
-		private ProductsPriceChangeFacade $priceChangeFacade
+		private ProductsPriceChangeFacade $priceChangeFacade,
 	)
 	{
 	}

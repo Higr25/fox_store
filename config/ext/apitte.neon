@@ -17,7 +17,7 @@ api:
 		Apitte\Core\DI\Plugin\CoreServicesPlugin:
 		Apitte\Debug\DI\DebugPlugin:
 		Apitte\Middlewares\DI\MiddlewaresPlugin:
-			tracy: false
+			tracy: true
 			autobasepath: true
 		Apitte\OpenApi\DI\OpenApiPlugin:
 			swaggerUi:
@@ -32,9 +32,8 @@ services:
 			- setCatchExceptions(%productionMode%) # used in debug only
 			- setLogger(@Psr\Log\LoggerInterface, Psr\Log\LogLevel::ERROR)
 	middlewares.logging:
-		factory: Contributte\Middlewares\LoggingMiddleware
-		arguments: [@monolog.logger.default]
-		tags: [middleware: [priority: 100]]
+		factory: App\Model\Api\Middleware\RequestLoggerMiddleware
+		tags: [middleware: [priority: 2]]
 	middleware.methodOverride:
 		factory: Contributte\Middlewares\MethodOverrideMiddleware
 		tags: [middleware: [priority: 150]]

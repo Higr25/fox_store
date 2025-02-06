@@ -1,13 +1,6 @@
 # Parameters
 #
 parameters:
-
-	# System
-	system:
-		error:
-			email: dev@dev.dev
-			presenter: Front:Error
-
 	database:
 		driver: pdo_mysql
 		port: 3306
