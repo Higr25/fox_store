@@ -53,8 +53,8 @@ class ProductsController extends BaseV1Controller
 	 * @Apitte\Method("GET")
 	 * @Apitte\RequestParameters({
 	 *      @Apitte\RequestParameter(name="product_id", type="int", in="query", required=false, description="ID of the product to search for in history"),
-	 * 		@Apitte\RequestParameter(name="before", type="DateTimeStringQuery", in="query", required=false, description="String in DateTime format Y-m-d H:i:s to set as maximum date and time to which search history"),
-	 *      @Apitte\RequestParameter(name="after", type="DateTimeStringQuery", in="query", required=false, description="String in DateTime format Y-m-d H:i:s to set as minimum date and time from which search history"),
+	 * 		@Apitte\RequestParameter(name="before", type="DateTimeStringQuery", in="query", required=false, description="String in DateTime format Y-m-d\TH:i:s to set as maximum date and time to which search history"),
+	 *      @Apitte\RequestParameter(name="after", type="DateTimeStringQuery", in="query", required=false, description="String in DateTime format Y-m-d\TH:i:s to set as minimum date and time from which search history"),
 	 * })
 	 * @return ProductPriceChangeResDto[]
 	 */
