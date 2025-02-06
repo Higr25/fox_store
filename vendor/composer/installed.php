@@ -5,7 +5,7 @@
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'reference' => '32505975f83c16d288c2c453eaa59345946456f4',
+        'reference' => '9da401d921d37427799e3fbaef00b9d8a15bd341',
         'name' => 'contributte/apitte-skeleton',
         'dev' => true,
     ),
@@ -121,7 +121,7 @@
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
-            'reference' => '32505975f83c16d288c2c453eaa59345946456f4',
+            'reference' => '9da401d921d37427799e3fbaef00b9d8a15bd341',
             'dev_requirement' => false,
         ),
         'contributte/bootstrap' => array(
@@ -814,6 +814,15 @@
             'install_path' => __DIR__ . '/../phpunit/phpunit',
             'aliases' => array(),
             'reference' => '3c3ae14c90f244cdda95028c3e469028e8d1c02c',
+            'dev_requirement' => false,
+        ),
+        'predis/predis' => array(
+            'pretty_version' => 'v2.3.0',
+            'version' => '2.3.0.0',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../predis/predis',
+            'aliases' => array(),
+            'reference' => 'bac46bfdb78cd6e9c7926c697012aae740cb9ec9',
             'dev_requirement' => false,
         ),
         'psr/cache' => array(

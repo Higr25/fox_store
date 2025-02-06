@@ -6,6 +6,7 @@
       <sourceFolder url="file://$MODULE_DIR$/db" isTestSource="false" packagePrefix="Database\" />
       <sourceFolder url="file://$MODULE_DIR$/tests" isTestSource="false" packagePrefix="Tests\" />
       <sourceFolder url="file://$MODULE_DIR$/vendor/zircote/swagger-php/src" isTestSource="false" packagePrefix="OpenApi\" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/predis/predis" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

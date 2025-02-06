@@ -21,6 +21,7 @@ services:
       - ./:/var/www/html:cached
     depends_on:
       - mariadb
+      - redis
     environment:
       NETTE_DEBUG: 1
       PHP_EXTENSION_MYSQLI: 1
@@ -40,3 +41,8 @@ services:
 #      - .docker/data/mysql:/var/lib/mysql
     ports:
       - 3306:3306
+
+  redis:
+    image: redis:alpine
+    ports:
+      - "6379:6379"

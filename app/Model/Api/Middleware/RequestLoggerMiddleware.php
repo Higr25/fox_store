@@ -10,23 +10,20 @@ use Psr\Log\LoggerInterface;
 
 class RequestLoggerMiddleware implements IMiddleware
 {
-	private ILogger $logger;
-	
-	public function __construct(ILogger $logger)
-	{
-		$this->logger = $logger;
-	}
-	
+	public function __construct(
+		private ILogger $logger
+	){}
+
 	public function __invoke(ServerRequestInterface $request, ResponseInterface $response, callable $next): ResponseInterface
 	{
 		$this->logRequestDetails();
-		
+
 		return $next($request, $response);
 	}
-	
+
 	private function logRequestDetails(): void
 	{
-		// TODO: make logger work with all levels, not just ERROR
+		// TODO: make logger work with INFO level
 		$this->logger->log('Request received', ILogger::WARNING);
 	}
 }

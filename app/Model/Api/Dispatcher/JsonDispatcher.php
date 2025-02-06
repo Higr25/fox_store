@@ -30,9 +30,9 @@ class JsonDispatcher extends ApitteJsonDispatcher
 	protected SerializerInterface $serializer;
 
 	protected ValidatorInterface $validator;
-	
+
 	protected AnnotationReader $annotationReader;
-	
+
 	protected QueryValidator $queryValidator;
 
 	public function __construct(IRouter $router, IHandler $handler, SerializerInterface $serializer, ValidatorInterface $validator, AnnotationReader $annotationReader, QueryValidator $queryValidator)
@@ -89,7 +89,7 @@ class JsonDispatcher extends ApitteJsonDispatcher
 		if ($endpoint === null) {
 			return $request;
 		}
-		
+
 		// Validate query parameters
 		$this->queryValidator->validateQuery($request, $endpoint);
 
@@ -148,13 +148,13 @@ class JsonDispatcher extends ApitteJsonDispatcher
 
 		return $response;
 	}
-	
+
 	private function validateQuery(ApiRequest $request, $endpoint): void
 	{
 		$controller = $endpoint->getHandler();
 		$reflectionMethod = new \ReflectionMethod($controller->getClass(), $controller->getMethod());
 		$annotations = $this->annotationReader->getMethodAnnotations($reflectionMethod);
-		
+
 		$parametersAnnotation = null;
 		foreach ($annotations as $annotation) {
 			if ($annotation instanceof RequestParameters) {
@@ -162,10 +162,10 @@ class JsonDispatcher extends ApitteJsonDispatcher
 				break;
 			}
 		}
-		
+
 		if ($parametersAnnotation !== null) {
 			$parameters = $parametersAnnotation->getParameters(); // This will return an array of RequestParameter objects
-			
+
 			foreach ($parameters as $parameter) {
 				$activeParam = $request->getParameter($parameter->getName());
 				if ($parameter->getType() === 'DateTimeString' && $activeParam) {
@@ -182,11 +182,11 @@ class JsonDispatcher extends ApitteJsonDispatcher
 	private function getDateTimePatternFromSchema(): ?string
 	{
 		$reflectionClass = new ReflectionClass(DateTimeStringReqDto::class);
-		
+
 		$reflectionProperty = $reflectionClass->getProperty('datetime');
-		
+
 		$annotations = $this->annotationReader->getPropertyAnnotations($reflectionProperty);
-		
+
 		foreach ($annotations as $annotation) {
 			if ($annotation instanceof Schema) {
 				 return $annotation->pattern;

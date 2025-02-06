@@ -31,12 +31,27 @@ services:
 			- setDebugMode(%debugMode%)
 			- setCatchExceptions(%productionMode%) # used in debug only
 			- setLogger(@Psr\Log\LoggerInterface, Psr\Log\LogLevel::ERROR)
+
+	middlewares.catchException:
+		factory: App\Model\Api\Middleware\CatchExceptionMiddleware
+		tags: [middleware: [priority: 5]]
+
 	middlewares.logging:
 		factory: App\Model\Api\Middleware\RequestLoggerMiddleware
-		tags: [middleware: [priority: 2]]
+		tags: [middleware: [priority: 10]]
+
+	middlewares.rateLimit:
+		factory: App\Model\Api\Middleware\RateLimitMiddleware(@redisClient, %rateLimit.limit%, %rateLimit.window%)
+		tags: [middleware: [priority: 20]]
+
+	middlewares.jsonValidator:
+		factory: App\Model\Api\Middleware\JsonValidatorMiddleware
+		tags: [middleware: [priority: 50]]
+
 	middleware.methodOverride:
 		factory: Contributte\Middlewares\MethodOverrideMiddleware
 		tags: [middleware: [priority: 150]]
+
 	middleware.cors:
 		factory: App\Model\Api\Middleware\CORSMiddleware
 		tags: [middleware: [priority: 200]]

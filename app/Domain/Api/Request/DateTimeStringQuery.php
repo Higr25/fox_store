@@ -1,5 +1,5 @@
 <?php
-	
+
 namespace App\Domain\Api\Request;
 
 use OpenApi\Annotations as OA;
@@ -7,7 +7,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 class DateTimeStringQuery
 {
-	
+
 	/** @OA\Schema(
 	*     schema="DateTimeStringQuery",
 	*     type="string",

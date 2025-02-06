@@ -4,28 +4,19 @@ namespace App\Domain\Api\Request;
 
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Serializer\Annotation\SerializedName;
+use Apitte\OpenApi;
 
 final class UpdateProductReqDto
 {
-	/**
-	 * @Assert\Length(max=50)
-	 * @Apitte\OpenApi("New name of the product.")
-	 */
+	#[Assert\Length(max: 50)]
 	public ?string $name = null;
-	
-	/**
-	 * @Assert\Positive
-	 * @Apitte\OpenApi("New price of the product.")
-	 */
+
+	#[Assert\PositiveOrZero]
 	public ?float $price = null;
-	
-	/**
-	 * @Apitte\OpenApi("New stock amount of the product.")
-	 */
+
+	#[Assert\PositiveOrZero]
 	public ?int $stock = null;
-	
-	/**
-	 * @Apitte\OpenApi("Stock amount difference of the product. Accepts negative values.")
-	 */
+
+	#[Assert\NotEqualTo(0)]
 	public ?int $changeStock = null;
 }

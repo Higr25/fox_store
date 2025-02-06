@@ -42,7 +42,7 @@ class ProductDeleteController extends BaseV1Controller
 				->withHeader('Content-Type', 'application/json; charset=utf-8');
 		} catch (DriverException $e) {
 			throw ServerErrorException::create()
-				->withMessage('Cannot create product')
+				->withMessage('Cannot delete product')
 				->withPrevious($e);
 		}
 	}

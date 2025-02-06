@@ -1,10 +1,8 @@
 # Services
 #
 services:
-	# Domain =================
 	- App\Domain\Api\Facade\ProductsFacade
 	- App\Domain\Api\Facade\ProductsPriceChangeFacade
-
 	- Doctrine\Common\Annotations\AnnotationReader
 	- App\Model\Api\Validator\QueryValidator
 
@@ -51,3 +49,9 @@ services:
 		type: Symfony\Component\Validator\ValidatorBuilder
 		factory: Symfony\Component\Validator\Validation::createValidatorBuilder()::enableAttributeMapping()
 		autowired: false
+
+	## Cache =============
+	redisClient:
+		factory: Predis\Client
+		arguments:
+			- { scheme: '%redis.scheme%', host: '%redis.host%', port: '%redis.port%' }
