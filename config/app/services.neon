@@ -5,6 +5,9 @@ services:
 	- App\Domain\Api\Facade\ProductsFacade
 	- App\Domain\Api\Facade\ProductsPriceChangeFacade
 
+	- Doctrine\Common\Annotations\AnnotationReader
+	- App\Model\Api\Validator\QueryValidator
+
 	## Serialize =============
 	symfony.serializer.serializer:
 		factory: Symfony\Component\Serializer\Serializer

@@ -12,7 +12,7 @@ CREATE TABLE `product` (
 DROP TABLE IF EXISTS `product_price_change`;
 CREATE TABLE `product_price_change` (
     `id` INT UNSIGNED PRIMARY KEY NOT NULL AUTO_INCREMENT,
-    `product_id` INT NOT NULL,
+    `product_id` INT UNSIGNED NOT NULL,
     `old_price` FLOAT(6,2) NOT NULL,
     `new_price` FLOAT(6,2) NOT NULL,
     `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP

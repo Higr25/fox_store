@@ -5,7 +5,7 @@
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'reference' => '87e4284c724a7ed569bd69df2db88068d4fddfbe',
+        'reference' => '32505975f83c16d288c2c453eaa59345946456f4',
         'name' => 'contributte/apitte-skeleton',
         'dev' => true,
     ),
@@ -121,7 +121,7 @@
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
-            'reference' => '87e4284c724a7ed569bd69df2db88068d4fddfbe',
+            'reference' => '32505975f83c16d288c2c453eaa59345946456f4',
             'dev_requirement' => false,
         ),
         'contributte/bootstrap' => array(
@@ -912,8 +912,8 @@
         'psr/log-implementation' => array(
             'dev_requirement' => false,
             'provided' => array(
-                0 => '1.0|2.0|3.0',
-                1 => '3.0.0',
+                0 => '3.0.0',
+                1 => '1.0|2.0|3.0',
             ),
         ),
         'psr/simple-cache-implementation' => array(
@@ -1400,6 +1400,15 @@
             'install_path' => __DIR__ . '/../tracy/tracy',
             'aliases' => array(),
             'reference' => 'e7af75205b184ca8895bc57fafd331f8d5022d26',
+            'dev_requirement' => false,
+        ),
+        'zircote/swagger-php' => array(
+            'pretty_version' => '5.0.3',
+            'version' => '5.0.3.0',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../zircote/swagger-php',
+            'aliases' => array(),
+            'reference' => '7708510b17502a416214148edaa8c9958b23b6cd',
             'dev_requirement' => false,
         ),
     ),

@@ -8,9 +8,6 @@ parameters:
 			email: dev@dev.dev
 			presenter: Front:Error
 
-	static:
-		text: "This is example of static text"
-
 	database:
 		driver: pdo_mysql
 		port: 3306

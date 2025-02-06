@@ -80,6 +80,10 @@ class ComposerStaticInit2db27d30661b795a281e883ee02c133e
             'PHPStan\\' => 8,
             'PHPCSStandards\\Composer\\Plugin\\Installers\\PHPCodeSniffer\\' => 57,
         ),
+        'O' => 
+        array (
+            'OpenApi\\' => 8,
+        ),
         'N' => 
         array (
             'Nettrine\\ORM\\' => 13,
@@ -316,14 +320,19 @@ class ComposerStaticInit2db27d30661b795a281e883ee02c133e
         ),
         'PHPStan\\' => 
         array (
-            0 => __DIR__ . '/..' . '/phpstan/phpstan-strict-rules/src',
-            1 => __DIR__ . '/..' . '/phpstan/phpstan-nette/src',
-            2 => __DIR__ . '/..' . '/phpstan/phpstan-deprecation-rules/src',
-            3 => __DIR__ . '/..' . '/phpstan/phpstan-doctrine/src',
+            0 => __DIR__ . '/..' . '/phpstan/phpstan-deprecation-rules/src',
+            1 => __DIR__ . '/..' . '/phpstan/phpstan-doctrine/src',
+            2 => __DIR__ . '/..' . '/phpstan/phpstan-nette/src',
+            3 => __DIR__ . '/..' . '/phpstan/phpstan-strict-rules/src',
         ),
         'PHPCSStandards\\Composer\\Plugin\\Installers\\PHPCodeSniffer\\' => 
         array (
             0 => __DIR__ . '/..' . '/dealerdirect/phpcodesniffer-composer-installer/src',
+        ),
+        'OpenApi\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/zircote/swagger-php/src',
+            1 => __DIR__ . '/..' . '/zircote/swagger-php/src',
         ),
         'Nettrine\\ORM\\' => 
         array (
@@ -443,8 +452,8 @@ class ComposerStaticInit2db27d30661b795a281e883ee02c133e
         ),
         'Doctrine\\Common\\' => 
         array (
-            0 => __DIR__ . '/..' . '/doctrine/event-manager/src',
-            1 => __DIR__ . '/..' . '/doctrine/common/src',
+            0 => __DIR__ . '/..' . '/doctrine/common/src',
+            1 => __DIR__ . '/..' . '/doctrine/event-manager/src',
         ),
         'DeepCopy\\' => 
         array (

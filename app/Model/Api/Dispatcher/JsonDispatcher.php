@@ -2,6 +2,7 @@
 
 namespace App\Model\Api\Dispatcher;
 
+use Apitte\Core\Annotation\Controller\RequestParameters;
 use Apitte\Core\Dispatcher\JsonDispatcher as ApitteJsonDispatcher;
 use Apitte\Core\Exception\Api\ClientErrorException;
 use Apitte\Core\Exception\Api\ServerErrorException;
@@ -13,7 +14,11 @@ use Apitte\Core\Http\RequestAttributes;
 use Apitte\Core\Router\IRouter;
 use Apitte\Core\Schema\Endpoint;
 use Apitte\Core\Schema\EndpointRequestBody;
+use App\Model\Api\Validator\QueryValidator;
+use Doctrine\Common\Annotations\AnnotationReader;
 use Nette\Utils\Json;
+use OpenApi\Annotations\Schema;
+use ReflectionClass;
 use Symfony\Component\Serializer\Exception\ExtraAttributesException;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
@@ -25,13 +30,19 @@ class JsonDispatcher extends ApitteJsonDispatcher
 	protected SerializerInterface $serializer;
 
 	protected ValidatorInterface $validator;
+	
+	protected AnnotationReader $annotationReader;
+	
+	protected QueryValidator $queryValidator;
 
-	public function __construct(IRouter $router, IHandler $handler, SerializerInterface $serializer, ValidatorInterface $validator)
+	public function __construct(IRouter $router, IHandler $handler, SerializerInterface $serializer, ValidatorInterface $validator, AnnotationReader $annotationReader, QueryValidator $queryValidator)
 	{
 		parent::__construct($router, $handler);
 
 		$this->serializer = $serializer;
 		$this->validator = $validator;
+		$this->annotationReader = $annotationReader;
+		$this->queryValidator = $queryValidator;
 	}
 
 	protected function handle(ApiRequest $request, ApiResponse $response): ApiResponse
@@ -78,6 +89,9 @@ class JsonDispatcher extends ApitteJsonDispatcher
 		if ($endpoint === null) {
 			return $request;
 		}
+		
+		// Validate query parameters
+		$this->queryValidator->validateQuery($request, $endpoint);
 
 		// Get incoming request entity class, if defined. Otherwise, skip transforming.
 		/** @var EndpointRequestBody|null $requestBody */
@@ -133,6 +147,53 @@ class JsonDispatcher extends ApitteJsonDispatcher
 		$response->getBody()->write($serialized);
 
 		return $response;
+	}
+	
+	private function validateQuery(ApiRequest $request, $endpoint): void
+	{
+		$controller = $endpoint->getHandler();
+		$reflectionMethod = new \ReflectionMethod($controller->getClass(), $controller->getMethod());
+		$annotations = $this->annotationReader->getMethodAnnotations($reflectionMethod);
+		
+		$parametersAnnotation = null;
+		foreach ($annotations as $annotation) {
+			if ($annotation instanceof RequestParameters) {
+				$parametersAnnotation = $annotation;
+				break;
+			}
+		}
+		
+		if ($parametersAnnotation !== null) {
+			$parameters = $parametersAnnotation->getParameters(); // This will return an array of RequestParameter objects
+			
+			foreach ($parameters as $parameter) {
+				$activeParam = $request->getParameter($parameter->getName());
+				if ($parameter->getType() === 'DateTimeString' && $activeParam) {
+					if (!preg_match($this->getDateTimePatternFromSchema(), $activeParam)) {
+						throw ValidationException::create()
+							->withMessage('Invalid query parameter '.$parameter->getName().'. (valid example: 2025-02-05T12:34:56)')
+							->withFields([$parameter->getName()]);
+					}
+				}
+			}
+		}
+	}
+
+	private function getDateTimePatternFromSchema(): ?string
+	{
+		$reflectionClass = new ReflectionClass(DateTimeStringReqDto::class);
+		
+		$reflectionProperty = $reflectionClass->getProperty('datetime');
+		
+		$annotations = $this->annotationReader->getPropertyAnnotations($reflectionProperty);
+		
+		foreach ($annotations as $annotation) {
+			if ($annotation instanceof Schema) {
+				 return $annotation->pattern;
+			}
+		}
+
+		return null;
 	}
 
 }

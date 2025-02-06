@@ -24,6 +24,7 @@ class Bootstrap
 
 		// According to NETTE_DEBUG env
 		$configurator->setEnvDebugMode();
+//		$configurator->setDebugMode(false);
 
 		// Enable tracy and configure it
 		$configurator->enableTracy(__DIR__ . '/../var/log');

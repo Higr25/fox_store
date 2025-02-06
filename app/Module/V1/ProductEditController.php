@@ -45,9 +45,11 @@ class ProductEditController extends BaseV1Controller
 		$this->validate($dto);
 
 		$product = $this->productsFacade->findOneBy(['id' => $id]);
-
 		$this->productsFacade->update($id, $dto);
-		$this->priceChangeFacade->logChange($product->id, $product->price, $dto->price);
+		
+		if ($dto->price) {
+			$this->priceChangeFacade->logChange($product->id, $product->price, $dto->price);
+		}
 
 		return $this->productsFacade->findOneBy(['id' => $id]);
 	}

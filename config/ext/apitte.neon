@@ -11,7 +11,7 @@ resource:
 			paths: [%appDir%/Module]
 
 api:
-	debug: %debugMode%
+	debug: true
 	plugins:
 		Apitte\Core\DI\Plugin\CoreSchemaPlugin:
 		Apitte\Core\DI\Plugin\CoreServicesPlugin:
