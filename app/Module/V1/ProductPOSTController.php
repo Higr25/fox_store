@@ -7,42 +7,41 @@ use Apitte\Core\Exception\Api\ServerErrorException;
 use Apitte\Core\Http\ApiRequest;
 use Apitte\Core\Http\ApiResponse;
 use App\Domain\Api\Facade\ProductsFacade;
+use App\Domain\Api\Request\CreateProductReqDto;
 use Doctrine\DBAL\Exception\DriverException;
 use Nette\Http\IResponse;
+use OpenApi\Annotations as OA;
 
 /**
- * @Apitte\Path("/products")
+ * @Apitte\Path("/product")
  * @Apitte\Tag("Products")
  */
-class ProductDeleteController extends BaseV1Controller
+class ProductPOSTController extends BaseV1Controller
 {
 
 	public function __construct(
 		private ProductsFacade $productsFacade
 	)
-	{
-	}
+	{}
 
 	/**
-	 * @Apitte\OpenApi("
-	 *   summary: Delete product.
-	 * ")
-	 * @Apitte\Path("/{id}/delete")
-	 * @Apitte\Method("DELETE")
-	 * @Apitte\RequestParameters({
-	 * 		@Apitte\RequestParameter(name="id", type="int", in="path", required=TRUE, description="ID of product to delete.")
-	 * })
+	 * @Apitte\OpenApi("summary: Create new product. Maximum name length is 50 characters.")
+	 * @Apitte\Path("/create")
+	 * @Apitte\Method("POST")
+	 * @Apitte\RequestBody(entity="App\Domain\Api\Request\CreateProductReqDto")
 	 */
 	public function index(ApiRequest $request, ApiResponse $response): ApiResponse
 	{
-		try {
-			$this->productsFacade->delete((int)$request->getParameter('id'));
+		/** @var CreateProductReqDto $dto */
+		$dto = $request->getParsedBody();
 
-			return $response->withStatus(IResponse::S204_NoContent)
-				->withHeader('Content-Type', 'application/json; charset=utf-8');
+		try {
+			$this->productsFacade->create($dto);
+
+			return $response->withStatus(IResponse::S201_Created);
 		} catch (DriverException $e) {
 			throw ServerErrorException::create()
-				->withMessage('Cannot delete product')
+				->withMessage('Cannot create product')
 				->withPrevious($e);
 		}
 	}

@@ -41,6 +41,8 @@ services:
     ports:
       - 3306:3306
     stop_grace_period: 2s
+    volumes:
+      - ./db/${ENV:-dev}:/docker-entrypoint-initdb.d
     healthcheck:
       test: ["CMD", "mysql", "-ucontributte", "-pcontributte", "-Dcontributte", "-e", "SELECT 1"]
       interval: 2s

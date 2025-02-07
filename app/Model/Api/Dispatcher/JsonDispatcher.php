@@ -142,7 +142,9 @@ class JsonDispatcher extends ApitteJsonDispatcher
 			->withHeader('Content-Type', 'application/json; charset=utf-8');
 
 		// Serialize entity with symfony/serializer to JSON
-		$serialized = $this->serializer->serialize($data, 'json');
+		$serialized = $this->serializer->serialize($data, 'json', [
+			'json_encode_options' => JSON_UNESCAPED_UNICODE,
+		]);
 
 		$response->getBody()->write($serialized);
 

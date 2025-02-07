@@ -15,7 +15,7 @@ use Nette\Http\IResponse;
  * @Apitte\Path("/products")
  * @Apitte\Tag("Products")
  */
-class ProductEditController extends BaseV1Controller
+class ProductPATCHController extends BaseV1Controller
 {
 
 	public function __construct(
