@@ -20,7 +20,7 @@ class JsonValidatorMiddleware implements IMiddleware
 			json_decode($body, true, 512, JSON_THROW_ON_ERROR);
 		} catch (\JsonException $e) {
 			$response = $response->withStatus(400);
-			$response->getBody()->write('Invalid JSON format');
+			$response->getBody()->write('Invalid JSON format.');
 			return $response;
 		}
 

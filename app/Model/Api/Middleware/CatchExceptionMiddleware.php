@@ -42,6 +42,6 @@ class CatchExceptionMiddleware implements IMiddleware
 		$response = $response->withStatus($statusCode);
 		$response->getBody()->write($jsonResponse);
 
-		return $response->withHeader('Content-Type', 'application/json');
+		return $response->withHeader('Content-Type', 'application/json; charset=utf-8');
 	}
 }

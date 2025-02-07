@@ -41,7 +41,7 @@ services:
 		tags: [middleware: [priority: 10]]
 
 	middlewares.rateLimit:
-		factory: App\Model\Api\Middleware\RateLimitMiddleware(@redisClient, %rateLimit.limit%, %rateLimit.window%)
+		factory: App\Model\Api\Middleware\RateLimitMiddleware(%rateLimit.limit%, %rateLimit.window%, @redisClient)
 		tags: [middleware: [priority: 20]]
 
 	middlewares.jsonValidator:
