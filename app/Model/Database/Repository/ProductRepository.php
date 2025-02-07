@@ -1,16 +1,10 @@
 <?php declare(strict_types = 1);
 
-namespace App\Domain\Product;
+namespace App\Model\Database\Repository;
 
-use App\Model\Database\Repository\AbstractRepository;
+use App\Model\Database\Entity\Product;
 
-/**
-// * @method Product|NULL find($id)
-// * @method Product|NULL findOneBy(array $criteria, array $orderBy = NULL)
-// * @method Product[] findAll()
-// * @method Product[] findBy(array $criteria, array $orderBy = NULL, ?int $limit = NULL, ?int $offset = NULL)
- * @extends AbstractRepository<Product>
- */
+/** @extends AbstractRepository<Product> */
 class ProductRepository extends AbstractRepository
 {
 

@@ -2,39 +2,28 @@
 
 namespace App\Model\Api\Validator;
 
-use Apitte\Core\Annotation\Controller\RequestParameter;
-use Apitte\Core\Annotation\Controller\RequestParameters;
-use App\Domain\Api\Request\DateTimeStringQuery;
-use App\Domain\Api\Request\ProductNameQuery;
 use Apitte\Core\Http\ApiRequest;
 use Apitte\Core\Exception\Api\ValidationException;
-use App\Model\Utils\Strings;
+use Apitte\Core\Schema\Endpoint;
+use App\Domain\Api\Request\DateTimeStringQuery;
+use App\Domain\Api\Request\ProductNameQuery;
 use Doctrine\Common\Annotations\AnnotationReader;
 use OpenApi\Annotations\Schema;
-use ReflectionClass;
+use Apitte\Core\Annotation\Controller\RequestParameter;
+use Apitte\Core\Annotation\Controller\RequestParameters;
 
 class QueryValidator
 {
-	private AnnotationReader $annotationReader;
+	public function __construct(private AnnotationReader $annotationReader) {}
 
-	public function __construct(AnnotationReader $annotationReader)
+	public function validateQuery(ApiRequest $request, Endpoint $endpoint): void
 	{
-		$this->annotationReader = $annotationReader;
-	}
-
-	public function validateQuery(ApiRequest $request, $endpoint): void
-	{
-		$parametersAnnotation = $this->getParametersAnnotation($endpoint);
-		if (!$parametersAnnotation) {
-			return;
-		}
-
-		foreach ($parametersAnnotation->getParameters() as $parameter) {
+		foreach ($this->getQueryParameters($endpoint) as $parameter) {
 			$this->validateParameter($request, $parameter);
 		}
 	}
 
-	private function getParametersAnnotation($endpoint): ?RequestParameters
+	private function getQueryParameters(Endpoint $endpoint): array
 	{
 		$controller = $endpoint->getHandler();
 		$reflectionMethod = new \ReflectionMethod($controller->getClass(), $controller->getMethod());
@@ -42,77 +31,73 @@ class QueryValidator
 
 		foreach ($annotations as $annotation) {
 			if ($annotation instanceof RequestParameters) {
-				return $annotation;
+				return $annotation->getParameters();
 			}
 		}
 
-		return null;
+		return [];
 	}
 
 	private function validateParameter(ApiRequest $request, RequestParameter $parameter): void
 	{
-		$type = $parameter->getType();
+		if ($parameter->isRequired() && !$request->getParameter($parameter->getName())) {
+			throw ValidationException::create()
+				->withMessage('Missing required query parameter: ' . $parameter->getName());
+		}
+
 		$value = $request->getParameter($parameter->getName());
-
-		switch ($type) {
-			case 'ProductNameQuery':
-				$this->validateProductName($value, $parameter);
-				break;
-			case 'DateTimeStringQuery':
-				$this->validateDateTime($value, $parameter);
-				break;
-		}
-	}
-
-	private function validateProductName(?string $value, RequestParameter $parameter): void
-	{
-		if (!$value) {
+		if (empty($value)) {
 			return;
 		}
 
-		$maxLength = $this->getMaxLengthFromSchema(ProductNameQuery::class);
+		match ($parameter->getType()) {
+			'ProductNameQuery' => $this->validateProductName($value, $parameter),
+			'DateTimeStringQuery' => $this->validateDateTime($value, $parameter),
+			'int' => $this->validateInt($value, $parameter),
+			default => null,
+		};
+	}
+
+	private function validateProductName(string $value, RequestParameter $parameter): void
+	{
+		$maxLength = $this->getSchemaProperty(ProductNameQuery::class, 'maxLength');
 		if ($maxLength && strlen($value) > $maxLength) {
-			throw ValidationException::create()
-				->withMessage(Strings::stringError($parameter->getName(), $value))
-				->withFields([$parameter->getName()]);
+			$this->throwValidationException($parameter, $value);
 		}
 	}
 
-	private function validateDateTime(?string $value, RequestParameter $parameter): void
+	private function validateDateTime(string $value, RequestParameter $parameter): void
 	{
-		if (!$value) {
-			return;
-		}
-
-		$pattern = $this->getDateTimePatternFromSchema(DateTimeStringQuery::class);
+		$pattern = $this->getSchemaProperty(DateTimeStringQuery::class, 'pattern');
 		if ($pattern && !preg_match($pattern, $value)) {
-			throw ValidationException::create()
-				->withMessage(Strings::dateTimeError($parameter->getName(), $value))
-				->withFields([$parameter->getName()]);
+			$this->throwValidationException($parameter, $value);
 		}
 	}
 
-	private function getDateTimePatternFromSchema(string $class): ?string
+	private function validateInt($value, RequestParameter $parameter): void
 	{
-		return $this->getSchemaPattern($class, 'datetime');
+		if (!is_numeric($value) || (int)$value != $value) {
+			$this->throwValidationException($parameter, $value);
+		}
 	}
 
-	private function getMaxLengthFromSchema(string $class): ?int
+	private function getSchemaProperty(string $class, string $annotationKey): ?string
 	{
-		return $this->getSchemaPattern($class, 'name', 'maxLength');
-	}
-
-	private function getSchemaPattern(string $class, string $propertyName, string $annotationKey = 'pattern')
-	{
-		$reflectionProperty = (new ReflectionClass($class))->getProperty($propertyName);
-		$annotations = $this->annotationReader->getPropertyAnnotations($reflectionProperty);
-
-		foreach ($annotations as $annotation) {
-			if ($annotation instanceof Schema) {
-				return $annotation->{$annotationKey} ?? null;
+		$reflectionClass = new \ReflectionClass($class);
+		foreach ($reflectionClass->getProperties() as $property) {
+			$annotations = $this->annotationReader->getPropertyAnnotations($property);
+			foreach ($annotations as $annotation) {
+				if ($annotation instanceof Schema) {
+					return $annotation->{$annotationKey} ?? null;
+				}
 			}
 		}
-
 		return null;
+	}
+
+	private function throwValidationException(RequestParameter $parameter, $value): void
+	{
+		throw ValidationException::create()
+			->withMessage('Invalid query parameter '. $parameter->getName() . ': '. $value);
 	}
 }

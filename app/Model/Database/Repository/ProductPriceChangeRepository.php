@@ -1,8 +1,8 @@
 <?php declare(strict_types = 1);
 
-namespace App\Domain\ProductPriceChange;
+namespace App\Model\Database\Repository;
 
-use App\Model\Database\Repository\AbstractRepository;
+use App\Model\Database\Entity\ProductPriceChange;
 
 /**
 // * @method Product|NULL find($id)
@@ -17,7 +17,7 @@ class ProductPriceChangeRepository extends AbstractRepository
 	public function findBy(array $criteria, ?array $orderBy = null, $limit = null, $offset = null): array
 	{
 		$query = $this->createQueryBuilder('ppc');
-		
+
 		if ($criteria['product_id']) {
 			$query->andWhere('ppc.product = :id')
 				->setParameter('id', $criteria['product_id']);

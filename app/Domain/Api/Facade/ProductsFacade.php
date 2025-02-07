@@ -3,16 +3,11 @@
 namespace App\Domain\Api\Facade;
 
 use App\Domain\Api\Request\CreateProductReqDto;
-use App\Domain\Api\Request\CreateUserReqDto;
 use App\Domain\Api\Request\UpdateProductReqDto;
 use App\Domain\Api\Response\ProductResDto;
-use App\Domain\Api\Response\UserResDto;
-use App\Domain\Product\Product;
-use App\Domain\User\User;
+use App\Model\Database\Entity\Product;
 use App\Model\Database\EntityManagerDecorator;
-use App\Model\Exception\Runtime\Database\EntityNotFoundException;
-use App\Model\Security\Passwords;
-use Doctrine\Common\Collections\Criteria;
+use Apitte\Core\Exception\Api\ValidationException;
 
 final class ProductsFacade
 {
@@ -44,18 +39,26 @@ final class ProductsFacade
 	 */
 	public function findOneBy(array $criteria, ?array $orderBy = null): ProductResDto
 	{
-		$entity = $this->em->getRepository(Product::class)->findOneBy($criteria, $orderBy);
+		$product = $this->em->getRepository(Product::class)->findOneBy($criteria, $orderBy);
 
-		if ($entity === null) {
-			throw new EntityNotFoundException();
+		if ($product === null) {
+			throw ValidationException::create()
+				->withCode(404)
+				->withMessage('Product not found');
 		}
 
-		return ProductResDto::from($entity);
+		return ProductResDto::from($product);
 	}
 
 	public function delete(int $id): void
 	{
 		$product = $this->em->getRepository(Product::class)->findOneBy(['id' => $id]);
+
+		if ($product === null) {
+			throw ValidationException::create()
+				->withCode(404)
+				->withMessage('Product not found');
+		}
 
 		$this->em->remove($product);
 		$this->em->flush($product);
@@ -64,6 +67,12 @@ final class ProductsFacade
 	public function update(int $id, UpdateProductReqDto $dto): void
 	{
 		$product = $this->em->getRepository(Product::class)->findOneBy(['id' => $id]);
+
+		if ($product === null) {
+			throw ValidationException::create()
+				->withCode(404)
+				->withMessage('Product not found');
+		}
 
 		if ($dto->name) {
 			$product->setName($dto->name);
@@ -75,8 +84,8 @@ final class ProductsFacade
 			$product->setStock($dto->stock);
 		}
 
-		if ($dto->changeStock) {
-			$product->setStock($product->getStock() + $dto->changeStock);
+		if ($dto->stockMod) {
+			$product->setStock($product->getStock() + $dto->stockMod);
 		}
 
 		$this->em->persist($product);
@@ -85,7 +94,7 @@ final class ProductsFacade
 
 	public function create(CreateProductReqDto $dto): void
 	{
-		$product = new Product( // use request object here
+		$product = new Product(
 			$dto->name,
 			$dto->price,
 			$dto->stock,

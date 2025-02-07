@@ -3,9 +3,7 @@
 namespace App\Domain\Api\Response;
 
 use Apitte\Negotiation\Http\AbstractEntity;
-use App\Domain\Product\Product;
-use App\Domain\ProductPriceChange\ProductPriceChange;
-use DateTimeInterface;
+use App\Model\Database\Entity\ProductPriceChange;
 
 final class ProductPriceChangeResDto extends AbstractEntity
 {
@@ -15,7 +13,7 @@ final class ProductPriceChangeResDto extends AbstractEntity
 	public int $product_id;
 
 	public float $old_price;
-	
+
 	public float $new_price;
 
 	public \DateTimeInterface $created_at;

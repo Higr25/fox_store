@@ -12,13 +12,25 @@ use Throwable;
 
 class CatchExceptionMiddleware implements IMiddleware
 {
+
+	private bool $debugMode = false;
+
+	public function setDebugMode(bool $debugMode): void
+	{
+		$this->debugMode = $debugMode;
+	}
+
 	public function __invoke(ServerRequestInterface $request, ResponseInterface $response, callable $next): ResponseInterface
 	{
-		try {
-			return $next($request, $response);
-		} catch (Throwable $e) {
-			return $this->handleException($response, $e);
+		if (!$this->debugMode) {
+			try {
+				return $next($request, $response);
+			} catch (Throwable $e) {
+				return $this->handleException($response, $e);
+			}
 		}
+
+		return $next($request, $response);
 	}
 
 	private function handleException(ResponseInterface $response, Throwable $e): ResponseInterface

@@ -3,8 +3,8 @@
 namespace App\Domain\Api\Facade;
 
 use App\Domain\Api\Response\ProductPriceChangeResDto;
-use App\Domain\Product\Product;
-use App\Domain\ProductPriceChange\ProductPriceChange;
+use App\Model\Database\Entity\Product;
+use App\Model\Database\Entity\ProductPriceChange;
 use App\Model\Database\EntityManagerDecorator;
 use App\Model\Exception\Runtime\Database\EntityNotFoundException;
 

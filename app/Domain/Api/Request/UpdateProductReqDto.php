@@ -3,20 +3,41 @@
 namespace App\Domain\Api\Request;
 
 use Symfony\Component\Validator\Constraints as Assert;
-use Symfony\Component\Serializer\Annotation\SerializedName;
-use Apitte\OpenApi;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
+use OpenApi\Annotations as OA;
 
 final class UpdateProductReqDto
 {
+
 	#[Assert\Length(max: 50)]
 	public ?string $name = null;
 
 	#[Assert\PositiveOrZero]
 	public ?float $price = null;
 
-	#[Assert\PositiveOrZero]
+	#[Assert\AtLeastOneOf([
+		new Assert\NotBlank(),
+		new Assert\IsNull(),
+	])]
 	public ?int $stock = null;
 
-	#[Assert\NotEqualTo(0)]
-	public ?int $changeStock = null;
+	#[Assert\AtLeastOneOf([
+		new Assert\NotBlank(),
+		new Assert\IsNull(),
+	])]
+	public ?int $stockMod = null;
+
+	#[Assert\Callback]
+	public function validateProducts(ExecutionContextInterface $context): void
+	{
+		if (!empty($this->stock) && !empty($this->stockMod)) {
+			$context->buildViolation("Only one of 'stock' or 'stock_mod' must be set.")
+				->atPath('stock')
+				->addViolation();
+
+			$context->buildViolation("Only one of 'stock' or 'stock_mod' must be set.")
+				->atPath('stock_mod')
+				->addViolation();
+		}
+	}
 }

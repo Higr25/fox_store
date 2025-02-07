@@ -1,15 +1,16 @@
 <?php declare(strict_types = 1);
 
-namespace App\Domain\Product;
+namespace App\Model\Database\Entity;
 
 use App\Model\Database\Entity\AbstractEntity;
-use App\Model\Database\Entity\TCreatedAt;
-use App\Model\Database\Entity\TId;
-use App\Model\Database\Entity\TUpdatedAt;
+use App\Model\Database\Entity\Trait\TCreatedAt;
+use App\Model\Database\Entity\Trait\TId;
+use App\Model\Database\Entity\Trait\TUpdatedAt;
 use Doctrine\ORM\Mapping as ORM;
+use App\Model\Database\Repository\ProductRepository;
 
 /**
- * @ORM\Entity(repositoryClass="ProductRepository")
+ * @ORM\Entity(repositoryClass="App\Model\Database\Repository\ProductRepository")
  * @ORM\Table(name="`product`")
  * @ORM\HasLifecycleCallbacks
  */
@@ -61,21 +62,21 @@ class Product extends AbstractEntity
 	{
 		return $this->stock;
 	}
-	
+
 	public function setName(string $name): void
 	{
 		$this->name = $name;
 	}
-	
+
 	public function setPrice(float $price): void
 	{
 		$this->price = $price;
 	}
-	
+
 	public function setStock(int $stock): void
 	{
 		$this->stock = $stock;
 	}
 
-	
+
 }

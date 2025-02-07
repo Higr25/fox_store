@@ -3,8 +3,7 @@
 namespace App\Domain\Api\Response;
 
 use Apitte\Negotiation\Http\AbstractEntity;
-use App\Domain\Product\Product;
-use DateTimeInterface;
+use App\Model\Database\Entity\Product;
 
 final class ProductResDto extends AbstractEntity
 {

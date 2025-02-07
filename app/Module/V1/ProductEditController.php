@@ -42,24 +42,13 @@ class ProductEditController extends BaseV1Controller
 		$dto = $request->getParsedBody();
 		$id = (int)$request->getParameter('id');
 
-		$this->validate($dto);
-
 		$product = $this->productsFacade->findOneBy(['id' => $id]);
 		$this->productsFacade->update($id, $dto);
-		
+
 		if ($dto->price) {
 			$this->priceChangeFacade->logChange($product->id, $product->price, $dto->price);
 		}
 
 		return $this->productsFacade->findOneBy(['id' => $id]);
-	}
-
-	private function validate(UpdateProductReqDto $dto)
-	{
-		if ($dto->stock && $dto->changeStock) {
-			throw ValidationException::create()
-				->withCode(IResponse::S400_BadRequest)
-				->withMessage('Cannot input both stock & change_stock parameters at once.');
-		}
 	}
 }

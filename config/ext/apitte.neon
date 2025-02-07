@@ -24,17 +24,12 @@ api:
 				panel: true
 
 services:
-	middleware.tryCatch:
-		factory: Contributte\Middlewares\TryCatchMiddleware
+
+	middlewares.catchException:
+		factory: App\Model\Api\Middleware\CatchExceptionMiddleware()
 		tags: [middleware: [priority: 1]]
 		setup:
 			- setDebugMode(%debugMode%)
-			- setCatchExceptions(%productionMode%) # used in debug only
-			- setLogger(@Psr\Log\LoggerInterface, Psr\Log\LogLevel::ERROR)
-
-	middlewares.catchException:
-		factory: App\Model\Api\Middleware\CatchExceptionMiddleware
-		tags: [middleware: [priority: 5]]
 
 	middlewares.logging:
 		factory: App\Model\Api\Middleware\RequestLoggerMiddleware

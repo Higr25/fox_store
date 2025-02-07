@@ -3,7 +3,7 @@
 namespace App\Domain\Api\Request;
 
 use Symfony\Component\Validator\Constraints as Assert;
-use Apitte\OpenApi;
+
 
 final class CreateProductReqDto
 {

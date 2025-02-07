@@ -10,6 +10,7 @@ use App\Domain\Api\Facade\ProductsFacade;
 use App\Domain\Api\Request\CreateProductReqDto;
 use Doctrine\DBAL\Exception\DriverException;
 use Nette\Http\IResponse;
+use OpenApi\Annotations as OA;
 
 /**
  * @Apitte\Path("/products")
@@ -24,9 +25,7 @@ class ProductCreateController extends BaseV1Controller
 	{}
 
 	/**
-	 * @Apitte\OpenApi("
-	 *   summary: Create product.
-	 * ")
+	 * @Apitte\OpenApi("summary: Create new product. Maximum name length is 50 characters.")
 	 * @Apitte\Path("/create")
 	 * @Apitte\Method("POST")
 	 * @Apitte\RequestBody(entity="App\Domain\Api\Request\CreateProductReqDto")

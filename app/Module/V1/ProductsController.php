@@ -29,7 +29,7 @@ class ProductsController extends BaseV1Controller
 
 	/**
 	 * @Apitte\OpenApi("
-	 *   summary: List products.
+	 *   summary: List products in store. Add
 	 * ")
 	 * @Apitte\Path("/")
 	 * @Apitte\Method("GET")
