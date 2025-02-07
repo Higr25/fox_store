@@ -16,7 +16,13 @@ final class Version20250702124638 extends AbstractMigration
 
     public function up(Schema $schema): void
     {
-        $this->addSql('
+       $this->createProductTable();
+	   $this->createProductPriceHistoryTable();
+    }
+
+	private function createProductTable(): void
+	{
+		$this->addSql('
 			DROP TABLE IF EXISTS `product`;
 			CREATE TABLE `product` (
 				`id` INT UNSIGNED PRIMARY KEY NOT NULL AUTO_INCREMENT,
@@ -28,8 +34,11 @@ final class Version20250702124638 extends AbstractMigration
 			) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 		');
 		$this->addSql('CREATE INDEX `idx_product_name` ON `product` (`name`);');
-		$this->addSql('CREATE INDEX `idx_product_stock` ON `product` (`name`);');
+		$this->addSql('CREATE INDEX `idx_product_stock` ON `product` (`stock`);');
+	}
 
+	private function createProductPriceHistoryTable(): void
+	{
 		$this->addSql('
 			DROP TABLE IF EXISTS `product_price_change`;
 			CREATE TABLE `product_price_change` (
@@ -43,7 +52,7 @@ final class Version20250702124638 extends AbstractMigration
 		$this->addSql('ALTER TABLE `product_price_change` ADD CONSTRAINT `fk_product_price_change_product_id` FOREIGN KEY (`product_id`) REFERENCES product (`id`);');
 		$this->addSql('CREATE INDEX `idx_product_price_change_product_id` ON `product_price_change` (`product_id`);');
 		$this->addSql('CREATE INDEX `idx_product_price_change_created_at` ON `product_price_change` (`created_at`);');
-    }
+	}
 
     public function down(Schema $schema): void
     {

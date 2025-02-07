@@ -20,8 +20,11 @@ services:
     volumes:
       - ./:/var/www/html:cached
     depends_on:
-      - mariadb
-      - redis
+      redis:
+        condition: service_started
+      mariadb:
+        condition: service_healthy
+
     environment:
       NETTE_DEBUG: 1
       STARTUP_COMMAND_1: NETTE_DEBUG=1 php bin/console migrations:migrate --no-interaction
@@ -33,11 +36,14 @@ services:
       - MARIADB_PASSWORD=contributte
       - MARIADB_USER=contributte
       - MARIADB_DATABASE=contributte
-    volumes:
-      - ./db/entrypoint:/docker-entrypoint-initdb.d
-#      - .docker/data/mysql:/var/lib/mysql
     ports:
       - 3306:3306
+    healthcheck:
+      test: ["CMD", "mysql", "-ucontributte", "-pcontributte", "-Dcontributte", "-e", "SELECT 1"]
+      interval: 3s
+      retries: 10
+      start_period: 2s
+      timeout: 3s
 
   redis:
     image: redis:alpine

@@ -5,7 +5,7 @@
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'reference' => '9da401d921d37427799e3fbaef00b9d8a15bd341',
+        'reference' => '437374a2a9b0a166e0b67c5efc862addd07d0b2f',
         'name' => 'contributte/apitte-skeleton',
         'dev' => true,
     ),
@@ -121,7 +121,7 @@
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
-            'reference' => '9da401d921d37427799e3fbaef00b9d8a15bd341',
+            'reference' => '437374a2a9b0a166e0b67c5efc862addd07d0b2f',
             'dev_requirement' => false,
         ),
         'contributte/bootstrap' => array(
@@ -808,12 +808,12 @@
             'dev_requirement' => false,
         ),
         'phpunit/phpunit' => array(
-            'pretty_version' => '11.5.6',
-            'version' => '11.5.6.0',
+            'pretty_version' => '11.5.7',
+            'version' => '11.5.7.0',
             'type' => 'library',
             'install_path' => __DIR__ . '/../phpunit/phpunit',
             'aliases' => array(),
-            'reference' => '3c3ae14c90f244cdda95028c3e469028e8d1c02c',
+            'reference' => 'e1cb706f019e2547039ca2c839898cd5f557ee5d',
             'dev_requirement' => false,
         ),
         'predis/predis' => array(

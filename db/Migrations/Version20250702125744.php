@@ -31,6 +31,6 @@ final class Version20250702125744 extends AbstractMigration
 
     public function down(Schema $schema): void
     {
-
+		$this->addSql('DELETE FROM `product`;');
     }
 }
