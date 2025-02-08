@@ -17,7 +17,7 @@ use Tracy\ILogger;
  * @Apitte\Path("/products")
  * @Apitte\Tag("Products")
  */
-class ProductsGETController extends BaseV1Controller
+class ProductListGETController extends BaseV1Controller
 {
 
 	public function __construct(

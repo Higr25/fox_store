@@ -45,15 +45,6 @@ nettrine.orm.annotations:
 
 nettrine.orm.cache:
 
-nettrine.migrations:
-	directories:
-		Database\Migrations: %rootDir%/db/Migrations
-
-
-nettrine.fixtures:
-	paths:
-		- %rootDir%/db/Fixtures
-
 decorator:
 	Doctrine\Common\EventSubscriber:
 		tags: [nettrine.subscriber]

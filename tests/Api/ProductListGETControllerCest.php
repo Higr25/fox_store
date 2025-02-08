@@ -4,7 +4,7 @@ namespace Tests\Api;
 
 use Tests\Support\ApiTester;
 
-class ProductsGETControllerCest
+class ProductListGETControllerCest
 {
 
 	const URL = '/products';

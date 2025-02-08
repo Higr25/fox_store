@@ -4,3 +4,9 @@ modules:
     - REST:
         depends: PhpBrowser
         url: 'http://localhost:8000/api/v1/'
+    - Db:
+        dsn: "mysql:host=%database.%;dbname=rmaserver2"
+        user: "root"
+        password: "%DB_PASSWORD%"
+        cleanup: true
+    - Tests\Support\Helper\BaseTest
