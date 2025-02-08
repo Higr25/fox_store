@@ -22,6 +22,7 @@ use ReflectionClass;
 use Symfony\Component\Serializer\Exception\ExtraAttributesException;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Symfony\Component\Serializer\Exception\NotNormalizableValueException;
 use Throwable;
 
 class JsonDispatcher extends ApitteJsonDispatcher
@@ -111,23 +112,27 @@ class JsonDispatcher extends ApitteJsonDispatcher
 			);
 
 			$request = $request->withParsedBody($dto);
+
+			// Try to validate entity only if its enabled
+			$violations = $this->validator->validate($dto);
+
+			if (count($violations) > 0) {
+				$fields = [];
+				foreach ($violations as $violation) {
+					$fields[$violation->getPropertyPath()][] = $violation->getMessage();
+				}
+
+				throw ValidationException::create()
+					->withMessage('Invalid request data')
+					->withFields($fields);
+			}
+
+		} catch (NotNormalizableValueException $e) {
+			throw ValidationException::create()
+				->withMessage("Invalid data type in request body");
 		} catch (ExtraAttributesException $e) {
 			throw ValidationException::create()
 				->withMessage($e->getMessage());
-		}
-
-		// Try to validate entity only if its enabled
-		$violations = $this->validator->validate($dto);
-
-		if (count($violations) > 0) {
-			$fields = [];
-			foreach ($violations as $violation) {
-				$fields[$violation->getPropertyPath()][] = $violation->getMessage();
-			}
-
-			throw ValidationException::create()
-				->withMessage('Invalid request data')
-				->withFields($fields);
 		}
 
 		return $request;

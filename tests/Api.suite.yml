@@ -10,3 +10,4 @@ modules:
         password: "%DB_PASS%"
         cleanup: true
     - Tests\Support\BaseTest
+    - Asserts

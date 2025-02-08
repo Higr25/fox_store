@@ -9,8 +9,19 @@ class ProductDELETEControllerCest
 
 	public function deleteProduct(ApiTester $I)
 	{
-		$I->sendDELETE('/products/1/delete');
+		$I->sendGet('/products');
+		$I->seeResponseCodeIs(200);
+		$I->seeResponseContainsJson(['name' => 'Jablko']);
+
+		$productId = $I->grabFromDatabase('product', 'id', ['name' => 'Jablko']);
+		$I->sendDELETE("/products/$productId/delete");
 		$I->seeResponseCodeIs(204);
+
+		$I->sendGet('/products');
+		$I->seeResponseCodeIs(200);
+		$I->cantSeeResponseContainsJson(['name' => 'Jablko']);
+
+		$I->seeInDatabase('product', ['id' => $productId, 'name' => 'Jablko', 'active' => 0]);
 	}
 
 }

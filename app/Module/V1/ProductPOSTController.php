@@ -8,9 +8,11 @@ use Apitte\Core\Http\ApiRequest;
 use Apitte\Core\Http\ApiResponse;
 use App\Domain\Api\Facade\ProductsFacade;
 use App\Domain\Api\Request\CreateProductReqDto;
+use App\Model\Database\Repository\ProductRepository;
 use Doctrine\DBAL\Exception\DriverException;
+use App\Model\Database\EntityManagerDecorator;
 use Nette\Http\IResponse;
-use OpenApi\Annotations as OA;
+use Apitte\Core\Exception\Api\ValidationException;
 
 /**
  * @Apitte\Path("/product")
@@ -20,7 +22,7 @@ class ProductPOSTController extends BaseV1Controller
 {
 
 	public function __construct(
-		private ProductsFacade $productsFacade
+		private ProductsFacade $productsFacade,
 	)
 	{}
 
@@ -34,6 +36,13 @@ class ProductPOSTController extends BaseV1Controller
 	{
 		/** @var CreateProductReqDto $dto */
 		$dto = $request->getParsedBody();
+
+		$product = $this->productsFacade->findOneBy(['name' => $dto->name]);
+		if (isset($product)) {
+			throw ValidationException::create()
+				->withMessage('Product with this name already exists.')
+				->withCode(IResponse::S409_Conflict);
+		};
 
 		try {
 			$this->productsFacade->create($dto);

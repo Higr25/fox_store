@@ -40,7 +40,7 @@ class ProductListGETController extends BaseV1Controller
 	 * @return ProductResDto[]
 	 */
 	public function index(ApiRequest $request): array
-	{ //TODO: add orderby created_at
-		return $this->productsFacade->findBy($request->getParameters());
+	{
+		return $this->productsFacade->findBy($request->getParameters(), ['created_at' => 'desc']);
 	}
 }

@@ -35,6 +35,6 @@ class PriceHistoryGETController extends BaseV1Controller
 	 */
 	public function history(ApiRequest $request): array
 	{
-		return $this->priceChangeFacade->findBy($request->getParameters());
+		return $this->priceChangeFacade->findBy($request->getParameters(), ['created_at' => 'desc']);
 	}
 }

@@ -2,7 +2,6 @@
 
 namespace Tests\Api;
 
-use Codeception\Util\HttpCode;
 use Tests\Support\ApiTester;
 
 class OpenApiSchemaCest
@@ -15,7 +14,7 @@ class OpenApiSchemaCest
 		$I->haveHttpHeader('Content-Type', 'application/json');
 	}
 
-	public function createProduct(ApiTester $I)
+	public function openapiSchema(ApiTester $I)
 	{
 		$I->sendGET(self::URL);
 		$I->seeResponseCodeIs(200);

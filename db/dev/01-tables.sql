@@ -4,6 +4,7 @@ CREATE TABLE `product` (
     `name` VARCHAR(50) UNIQUE NOT NULL ,
     `price` FLOAT(6,2) NOT NULL,
     `stock` INT NOT NULL,
+    `active` TINYINT NOT NULL DEFAULT 1,
     `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;

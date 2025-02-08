@@ -37,17 +37,11 @@ final class ProductsFacade
 	 * @param mixed[] $criteria
 	 * @param string[] $orderBy
 	 */
-	public function findOneBy(array $criteria, ?array $orderBy = null): ProductResDto
+	public function findOneBy(array $criteria, ?array $orderBy = null): ?ProductResDto
 	{
 		$product = $this->em->getRepository(Product::class)->findOneBy($criteria, $orderBy);
 
-		if ($product === null) {
-			throw ValidationException::create()
-				->withCode(404)
-				->withMessage('Product not found');
-		}
-
-		return ProductResDto::from($product);
+		return $product ? ProductResDto::from($product) : null;
 	}
 
 	public function delete(int $id): void
@@ -60,7 +54,9 @@ final class ProductsFacade
 				->withMessage('Product not found');
 		}
 
-		$this->em->remove($product);
+		$product->setActive(0);
+
+		$this->em->persist($product);
 		$this->em->flush($product);
 	}
 

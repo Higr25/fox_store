@@ -43,6 +43,12 @@ class ProductPATCHController extends BaseV1Controller
 		$id = (int)$request->getParameter('id');
 
 		$product = $this->productsFacade->findOneBy(['id' => $id]);
+		if (!$product) {
+			throw ValidationException::create()
+				->withCode(404)
+				->withMessage('Product not found');
+		}
+
 		$this->productsFacade->update($id, $dto);
 
 		if ($dto->price) {

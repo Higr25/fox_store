@@ -10,14 +10,16 @@ final class CreateProductReqDto
 
 	#[Assert\NotBlank]
 	#[Assert\Length(max: 50)]
+	#[Assert\Type('string')]
 	public string $name;
 
 	#[Assert\NotBlank]
 	#[Assert\PositiveOrZero]
+	#[Assert\Type('float')]
 	public float $price;
 
-	#[Assert\NotBlank]
 	#[Assert\PositiveOrZero]
+	#[Assert\Type('integer')]
 	public int $stock;
 
 }

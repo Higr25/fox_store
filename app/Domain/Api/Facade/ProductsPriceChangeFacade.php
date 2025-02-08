@@ -32,21 +32,6 @@ final class ProductsPriceChangeFacade
 		return $result;
 	}
 
-	/**
-	 * @param mixed[] $criteria
-	 * @param string[] $orderBy
-	 */
-	public function findOneBy(array $criteria, ?array $orderBy = null): ProductPriceChangeResDto
-	{
-		$entity = $this->em->getRepository(ProductPriceChange::class)->findOneBy($criteria, $orderBy);
-
-		if ($entity === null) {
-			throw new EntityNotFoundException();
-		}
-
-		return ProductPriceChangeResDto::from($entity);
-	}
-
 	public function logChange(int $productId, float $oldPrice, float $newPrice): void
 	{
 		$product = $this->em->getRepository(Product::class)->find($productId);

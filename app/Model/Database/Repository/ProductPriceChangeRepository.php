@@ -27,6 +27,12 @@ class ProductPriceChangeRepository extends AbstractRepository
 				->setParameter('after', $criteria['after']);
 		}
 
+		if ($orderBy) {
+			foreach ($orderBy as $field => $direction) {
+				$query->addOrderBy('ppc.' . $field, $direction);
+			}
+		}
+
 		return $query->getQuery()->getResult();
 	}
 
