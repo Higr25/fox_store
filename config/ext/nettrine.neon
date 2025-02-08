@@ -14,8 +14,8 @@ extensions:
 	nettrine.orm.console: Nettrine\ORM\DI\OrmConsoleExtension(%consoleMode%)
 	nettrine.orm.annotations: Nettrine\ORM\DI\OrmAnnotationsExtension
 
-	nettrine.migrations: Nettrine\Migrations\DI\MigrationsExtension
-	nettrine.fixtures: Nettrine\Fixtures\DI\FixturesExtension
+#	nettrine.migrations: Nettrine\Migrations\DI\MigrationsExtension
+#	nettrine.fixtures: Nettrine\Fixtures\DI\FixturesExtension
 	nettrine.cache: Nettrine\Cache\DI\CacheExtension
 
 nettrine.dbal:
@@ -24,13 +24,13 @@ nettrine.dbal:
 	configuration:
 		sqlLogger: Nettrine\DBAL\Logger\PsrLogger(@Monolog\Logger)
 	connection:
-		driver: %database.driver%
-		host: %database.host%
-		user: %database.user%
-		password: %database.password%
-		dbname: %database.dbname%
-		port: %database.port%
-		serverVersion: %database.serverVersion%
+		driver: pdo_mysql
+		host: %DB_HOST%
+		user: %DB_USER%
+		password: %DB_PASS%
+		dbname: %DB_NAME%
+		port: %DB_PORT%
+		serverVersion: null
 		charset: utf8mb4
 
 nettrine.orm:

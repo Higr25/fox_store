@@ -17,7 +17,7 @@ api:
 		Apitte\Core\DI\Plugin\CoreServicesPlugin:
 		Apitte\Debug\DI\DebugPlugin:
 		Apitte\Middlewares\DI\MiddlewaresPlugin:
-			tracy: true
+#			tracy: true
 			autobasepath: true
 		Apitte\OpenApi\DI\OpenApiPlugin:
 			swaggerUi:
@@ -35,9 +35,9 @@ services:
 		factory: App\Model\Api\Middleware\RequestLoggerMiddleware
 		tags: [middleware: [priority: 10]]
 
-	middlewares.rateLimit:
-		factory: App\Model\Api\Middleware\RateLimitMiddleware(%rateLimit.limit%, %rateLimit.window%, @redisClient)
-		tags: [middleware: [priority: 20]]
+#	middlewares.rateLimit:
+#		factory: App\Model\Api\Middleware\RateLimitMiddleware(%rateLimit.limit%, %rateLimit.window%, @redisClient)
+#		tags: [middleware: [priority: 20]]
 
 	middlewares.jsonValidator:
 		factory: App\Model\Api\Middleware\JsonValidatorMiddleware

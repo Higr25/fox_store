@@ -14,7 +14,6 @@ class ProductListGETControllerCest
 		$I->sendGET(self::URL);
 		$I->seeResponseCodeIs(200);
 		$I->seeResponseIsJson();
-		codecept_debug($I->grabResponse());
 		$I->seeResponseContainsJson([
 			['name' => 'Jablko', 'price' => 10.3, 'stock' => 3],
 			['name' => 'Hřib', 'price' => 15.5, 'stock' => 5],

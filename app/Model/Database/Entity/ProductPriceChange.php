@@ -4,9 +4,11 @@ namespace App\Model\Database\Entity;
 
 use App\Model\Database\Entity\Trait\TCreatedAt;
 use App\Model\Database\Entity\Trait\TId;
+use Doctrine\ORM\Mapping as ORM;
+use App\Model\Database\Repository\ProductPriceChangeRepository;
 
 /**
- * @ORM\Entity(repositoryClass="ProductPriceChangeRepository")
+ * @ORM\Entity(repositoryClass="App\Model\Database\Repository\ProductPriceChangeRepository")
  * @ORM\Table(name="`product_price_change`")
  * @ORM\HasLifecycleCallbacks
  */

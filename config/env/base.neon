@@ -12,11 +12,3 @@ includes:
 php:
 	date.timezone: Europe/Prague
 	output_buffering: 4096
-
-# Nette section
-di:
-	debugger: false
-
-tracy:
-	logSeverity: E_ALL
-	strictMode: yes

@@ -5,8 +5,8 @@ modules:
         depends: PhpBrowser
         url: 'http://localhost:8000/api/v1/'
     - Db:
-        dsn: "mysql:host=%database.%;dbname=rmaserver2"
-        user: "root"
-        password: "%DB_PASSWORD%"
+        dsn: "mysql:host=host.docker.internal;dbname=%DB_NAME%"
+        user: "%DB_USER%"
+        password: "%DB_PASS%"
         cleanup: true
-    - Tests\Support\Helper\BaseTest
+    - Tests\Support\BaseTest

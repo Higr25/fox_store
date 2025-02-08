@@ -29,22 +29,22 @@ services:
     stop_grace_period: 2s
     environment:
       NETTE_DEBUG: 1
-      STARTUP_COMMAND_1: php bin/console migrations:migrate --no-interaction
 
   mariadb:
     image: mariadb:10.4
     environment:
-      - MARIADB_ROOT_PASSWORD=contributte
-      - MARIADB_PASSWORD=contributte
-      - MARIADB_USER=contributte
-      - MARIADB_DATABASE=contributte
+      - MARIADB_ROOT_PASSWORD=root
+      - MARIADB_PASSWORD=${DB_PASS}
+      - MARIADB_USER=${DB_USER}
+      - MARIADB_DATABASE=${DB_NAME}
     ports:
       - 3306:3306
     stop_grace_period: 2s
     volumes:
+      - ./.docker/mariadb/conf.d:/etc/mysql/conf.d
       - ./db/${ENV:-dev}:/docker-entrypoint-initdb.d
     healthcheck:
-      test: ["CMD", "mysql", "-ucontributte", "-pcontributte", "-Dcontributte", "-e", "SELECT 1"]
+      test: ["CMD", "mysql", "-u${DB_USER}", "-p${DB_PASS}", "-D${DB_NAME}", "-e", "SELECT 1"]
       interval: 2s
       retries: 10
       start_period: 2s

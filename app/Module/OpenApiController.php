@@ -6,13 +6,14 @@ use Apitte\Core\Annotation\Controller as Apitte;
 use Apitte\Core\Http\ApiRequest;
 use Apitte\Core\Http\ApiResponse;
 use Apitte\OpenApi\ISchemaBuilder;
+use App\Module\V1\BaseV1Controller;
 use Psr\Http\Message\ResponseInterface;
 
 /**
  * @Apitte\Path("/openapi")
  * @Apitte\Tag("OpenApi")
  */
-class OpenApiController extends BaseController
+class OpenApiController extends BaseV1Controller
 {
 
 	private ISchemaBuilder $schemaBuilder;
