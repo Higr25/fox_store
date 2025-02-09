@@ -9,7 +9,6 @@ use App\Domain\Api\Facade\ProductsPriceChangeFacade;
 use App\Domain\Api\Response\ProductPriceChangeResDto;
 use App\Domain\Api\Response\ProductResDto;
 use App\Model\Utils\DateTime;
-use App\Model\Utils\Validators;
 use OpenApi\Annotations\OpenApi as OA;
 use Tracy\ILogger;
 

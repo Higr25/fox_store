@@ -6,12 +6,15 @@ use App\Domain\Api\Response\ProductPriceChangeResDto;
 use App\Model\Database\Entity\Product;
 use App\Model\Database\Entity\ProductPriceChange;
 use App\Model\Database\EntityManagerDecorator;
-use App\Model\Exception\Runtime\Database\EntityNotFoundException;
+use Tracy\ILogger;
 
 final class ProductsPriceChangeFacade
 {
 
-	public function __construct(private EntityManagerDecorator $em)
+	public function __construct(
+		private EntityManagerDecorator $em,
+		private ILogger $logger
+	)
 	{
 	}
 
@@ -20,7 +23,7 @@ final class ProductsPriceChangeFacade
 	 * @param string[] $orderBy
 	 * @return ProductPriceChangeResDto[]
 	 */
-	public function findBy(array $criteria = [], ?array $orderBy = null, $limit = null, $offset = null): array
+	public function findBy(array $criteria = [], ?array $orderBy = null, ?int $limit = null, ?int $offset = null): array
 	{
 		$entities = $this->em->getRepository(ProductPriceChange::class)->findBy($criteria, $orderBy, $limit, $offset);
 		$result = [];
@@ -35,6 +38,11 @@ final class ProductsPriceChangeFacade
 	public function logChange(int $productId, float $oldPrice, float $newPrice): void
 	{
 		$product = $this->em->getRepository(Product::class)->find($productId);
+		if ($product === null) {
+			$this->logger->log(ILogger::ERROR, 'Product not found when saving price history: ' . $productId);
+			return;
+		}
+
 		$productPriceChange = new ProductPriceChange(
 			$product,
 			$oldPrice,

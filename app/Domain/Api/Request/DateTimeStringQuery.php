@@ -17,6 +17,6 @@ class DateTimeStringQuery
 	*     description="String in DateTime format Y-m-d\TH:i:s"
 	* )
 	*/
-	public $datetime;
+	public string $datetime;
 }
 

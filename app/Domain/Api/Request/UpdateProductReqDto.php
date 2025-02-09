@@ -30,7 +30,7 @@ final class UpdateProductReqDto
 	#[Assert\Callback]
 	public function validateProducts(ExecutionContextInterface $context): void
 	{
-		if (!empty($this->stock) && !empty($this->stockMod)) {
+		if ($this->stock !== null && $this->stockMod !== null) {
 			$context->buildViolation("Only one of 'stock' or 'stock_mod' must be set.")
 				->atPath('stock')
 				->addViolation();

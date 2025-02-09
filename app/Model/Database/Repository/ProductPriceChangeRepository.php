@@ -12,22 +12,22 @@ class ProductPriceChangeRepository extends AbstractRepository
 	{
 		$query = $this->createQueryBuilder('ppc');
 
-		if ($criteria['product_id']) {
+		if ($criteria['product_id'] !== null) {
 			$query->andWhere('ppc.product = :id')
 				->setParameter('id', $criteria['product_id']);
 		}
 
-		if ($criteria['before']) {
+		if ($criteria['before'] !== null) {
 			$query->andWhere('ppc.created_at <= :before')
 				->setParameter('before', $criteria['before']);
 		}
 
-		if ($criteria['after']) {
+		if ($criteria['after'] !== null) {
 			$query->andWhere('ppc.created_at >= :after')
 				->setParameter('after', $criteria['after']);
 		}
 
-		if ($orderBy) {
+		if ($orderBy !== null) {
 			foreach ($orderBy as $field => $direction) {
 				$query->addOrderBy('ppc.' . $field, $direction);
 			}

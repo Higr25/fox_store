@@ -6,6 +6,7 @@ use Contributte\Bootstrap\ExtraConfigurator;
 use Dotenv\Dotenv;
 use Nette\DI\Compiler;
 use Tracy\Debugger;
+use Nette\Bootstrap\Configurator;
 
 class Bootstrap
 {
@@ -14,7 +15,7 @@ class Bootstrap
 	{
 		date_default_timezone_set('Europe/Prague');
 
-		$dotenv = Dotenv::createImmutable(realpath(__DIR__ . '/..'), '.env');
+		$dotenv = Dotenv::createImmutable((string)realpath(__DIR__ . '/..'), '.env');
 		$dotenv->safeLoad();
 
 		$configurator = new ExtraConfigurator();
@@ -22,8 +23,8 @@ class Bootstrap
 
 		unset($configurator->defaultExtensions['security']);
 
-		$configurator->onCompile[] = function (ExtraConfigurator $configurator, Compiler $compiler): void {
-			$compiler->addConfig(['parameters' => $configurator->getEnvironmentParameters()]);
+		$configurator->onCompile[] = function (Configurator $configurator, Compiler $compiler): void {
+			$compiler->addConfig(['parameters' => $_ENV]);
 		};
 
 		$configurator->setEnvDebugMode();

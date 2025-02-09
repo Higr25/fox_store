@@ -5,6 +5,7 @@ namespace App\Module\V1;
 use Apitte\Core\Annotation\Controller as Apitte;
 use Apitte\Core\Exception\Api\ValidationException;
 use Apitte\Core\Http\ApiRequest;
+use Apitte\Core\Http\ApiResponse;
 use App\Domain\Api\Facade\ProductsFacade;
 use App\Domain\Api\Facade\ProductsPriceChangeFacade;
 use App\Domain\Api\Request\UpdateProductReqDto;
@@ -19,7 +20,7 @@ class ProductPATCHController extends BaseV1Controller
 {
 
 	public function __construct(
-		private ProductsFacade $productsFacade,
+		private ProductsFacade            $productsFacade,
 		private ProductsPriceChangeFacade $priceChangeFacade,
 	){}
 
@@ -34,16 +35,15 @@ class ProductPATCHController extends BaseV1Controller
 	 * })
 	 * @Apitte\RequestBody(entity="App\Domain\Api\Request\UpdateProductReqDto")
 	 * @param ApiRequest $request
-	 * @return ProductResDto
 	 */
-	public function index(ApiRequest $request): ProductResDto
+	public function index(ApiRequest $request): ?ProductResDto
 	{
 		/** @var UpdateProductReqDto $dto */
 		$dto = $request->getParsedBody();
 		$id = (int)$request->getParameter('id');
 
 		$product = $this->productsFacade->findOneBy(['id' => $id]);
-		if (!$product) {
+		if ($product === null) {
 			throw ValidationException::create()
 				->withCode(404)
 				->withMessage('Product not found');
@@ -51,7 +51,7 @@ class ProductPATCHController extends BaseV1Controller
 
 		$this->productsFacade->update($id, $dto);
 
-		if ($dto->price) {
+		if ($dto->price !== null) {
 			$this->priceChangeFacade->logChange($product->id, $product->price, $dto->price);
 		}
 

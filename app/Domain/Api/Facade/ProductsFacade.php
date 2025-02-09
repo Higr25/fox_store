@@ -21,7 +21,7 @@ final class ProductsFacade
 	 * @param string[] $orderBy
 	 * @return ProductResDto[]
 	 */
-	public function findBy(array $criteria = [], ?array $orderBy = null, $limit = null, $offset = null): array
+	public function findBy(array $criteria = [], ?array $orderBy = null, ?int $limit = null, ?int $offset = null): array
 	{
 		$entities = $this->em->getRepository(Product::class)->findBy($criteria, $orderBy, $limit, $offset);
 		$result = [];
@@ -41,7 +41,11 @@ final class ProductsFacade
 	{
 		$product = $this->em->getRepository(Product::class)->findOneBy($criteria, $orderBy);
 
-		return $product ? ProductResDto::from($product) : null;
+		if ($product instanceof Product) {
+			return ProductResDto::from($product);
+		}
+
+		return null;
 	}
 
 	public function delete(int $id): void
@@ -70,17 +74,17 @@ final class ProductsFacade
 				->withMessage('Product not found');
 		}
 
-		if ($dto->name) {
+		if ($dto->name !== null) {
 			$product->setName($dto->name);
 		}
-		if ($dto->price) {
+		if ($dto->price !== null) {
 			$product->setPrice($dto->price);
 		}
-		if ($dto->stock) {
+		if ($dto->stock !== null) {
 			$product->setStock($dto->stock);
 		}
 
-		if ($dto->stockMod) {
+		if ($dto->stockMod !== null) {
 			$product->setStock($product->getStock() + $dto->stockMod);
 		}
 

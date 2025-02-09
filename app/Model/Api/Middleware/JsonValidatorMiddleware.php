@@ -16,14 +16,14 @@ class JsonValidatorMiddleware implements IMiddleware
 
 	public function __invoke(ServerRequestInterface $request, ResponseInterface $response, callable $next): ResponseInterface
 	{
-		if (!$body = (string)$request->getBody()) {
+		$body = (string) $request->getBody();
+		if ($body === '') {
 			return $next($request, $response);
 		}
 
 		try {
 			json_decode($body, true, 512, JSON_THROW_ON_ERROR);
 		} catch (\JsonException $e) {
-			var_Dump(json_last_error_msg());
 			$this->logger->log('Invalid JSON format.',ILogger::EXCEPTION);
 			$response = $response->withStatus(400);
 			$response->getBody()->write('Invalid JSON format.');

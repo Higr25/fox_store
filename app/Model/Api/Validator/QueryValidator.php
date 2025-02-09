@@ -11,6 +11,7 @@ use Doctrine\Common\Annotations\AnnotationReader;
 use OpenApi\Annotations\Schema;
 use Apitte\Core\Annotation\Controller\RequestParameter;
 use Apitte\Core\Annotation\Controller\RequestParameters;
+use ReflectionException;
 
 class QueryValidator
 {
@@ -19,10 +20,29 @@ class QueryValidator
 	public function validateQuery(ApiRequest $request, Endpoint $endpoint): void
 	{
 		foreach ($this->getQueryParameters($endpoint) as $parameter) {
-			$this->validateParameter($request, $parameter);
+			$name = $parameter->getName();
+			$value = $request->getParameter($name);
+
+			if ($parameter->isRequired() && $value === null) {
+				throw ValidationException::create()->withMessage("Missing required query parameter: $name");
+			}
+
+			if ($value !== null) {
+				match ($parameter->getType()) {
+					'ProductNameQuery' => $this->validateProductName($value, $parameter),
+					'DateTimeStringQuery' => $this->validateDateTime($value, $parameter),
+					'int' => $this->validateInt($value, $parameter),
+					default => null,
+				};
+			}
 		}
 	}
 
+	/**
+	 * @param Endpoint $endpoint
+	 * @return RequestParameter[]
+	 * @throws ReflectionException
+	 */
 	private function getQueryParameters(Endpoint $endpoint): array
 	{
 		$controller = $endpoint->getHandler();
@@ -38,30 +58,10 @@ class QueryValidator
 		return [];
 	}
 
-	private function validateParameter(ApiRequest $request, RequestParameter $parameter): void
-	{
-		if ($parameter->isRequired() && !$request->getParameter($parameter->getName())) {
-			throw ValidationException::create()
-				->withMessage('Missing required query parameter: ' . $parameter->getName());
-		}
-
-		$value = $request->getParameter($parameter->getName());
-		if (empty($value)) {
-			return;
-		}
-
-		match ($parameter->getType()) {
-			'ProductNameQuery' => $this->validateProductName($value, $parameter),
-			'DateTimeStringQuery' => $this->validateDateTime($value, $parameter),
-			'int' => $this->validateInt($value, $parameter),
-			default => null,
-		};
-	}
-
 	private function validateProductName(string $value, RequestParameter $parameter): void
 	{
 		$maxLength = $this->getSchemaProperty(ProductNameQuery::class, 'maxLength');
-		if ($maxLength && strlen($value) > $maxLength) {
+		if ($maxLength !== null && strlen($value) > $maxLength) {
 			$this->throwValidationException($parameter, $value);
 		}
 	}
@@ -69,33 +69,48 @@ class QueryValidator
 	private function validateDateTime(string $value, RequestParameter $parameter): void
 	{
 		$pattern = $this->getSchemaProperty(DateTimeStringQuery::class, 'pattern');
-		if ($pattern && !preg_match($pattern, $value)) {
+		if ($pattern !== null && preg_match($pattern, $value) !== false) {
 			$this->throwValidationException($parameter, $value);
 		}
 	}
 
-	private function validateInt($value, RequestParameter $parameter): void
+	private function validateInt(mixed $value, RequestParameter $parameter): void
 	{
 		if (!is_numeric($value) || (int)$value != $value) {
 			$this->throwValidationException($parameter, $value);
 		}
 	}
 
+
+	/**
+	 * @param string $class
+	 * @param string $annotationKey
+	 * @return string|null
+	 * @throws ReflectionException
+	 */
 	private function getSchemaProperty(string $class, string $annotationKey): ?string
 	{
+		if (!class_exists($class)) {
+			throw new \InvalidArgumentException("Class '$class' does not exist.");
+		}
+
 		$reflectionClass = new \ReflectionClass($class);
+
 		foreach ($reflectionClass->getProperties() as $property) {
 			$annotations = $this->annotationReader->getPropertyAnnotations($property);
+
 			foreach ($annotations as $annotation) {
-				if ($annotation instanceof Schema) {
-					return $annotation->{$annotationKey} ?? null;
+				if ($annotation instanceof Schema && property_exists($annotation, $annotationKey)) {
+					return $annotation->{$annotationKey};
 				}
 			}
 		}
+
 		return null;
 	}
 
-	private function throwValidationException(RequestParameter $parameter, $value): void
+
+	private function throwValidationException(RequestParameter $parameter, string $value): void
 	{
 		throw ValidationException::create()
 			->withMessage('Invalid query parameter '. $parameter->getName() . ': '. $value);

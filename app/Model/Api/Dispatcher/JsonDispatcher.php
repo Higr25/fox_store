@@ -29,11 +29,8 @@ class JsonDispatcher extends ApitteJsonDispatcher
 {
 
 	protected SerializerInterface $serializer;
-
 	protected ValidatorInterface $validator;
-
 	protected AnnotationReader $annotationReader;
-
 	protected QueryValidator $queryValidator;
 
 	public function __construct(IRouter $router, IHandler $handler, SerializerInterface $serializer, ValidatorInterface $validator, AnnotationReader $annotationReader, QueryValidator $queryValidator)
@@ -52,7 +49,6 @@ class JsonDispatcher extends ApitteJsonDispatcher
 			$request = $this->transformRequest($request);
 			$result = $this->handler->handle($request, $response);
 
-			// Except ResponseInterface convert all to json
 			$response = !($result instanceof ApiResponse) ? $this->transformResponse($result, $response) : $result;
 		} catch (ClientErrorException | ServerErrorException $e) {
 			$data = [];
@@ -79,22 +75,16 @@ class JsonDispatcher extends ApitteJsonDispatcher
 		return $response;
 	}
 
-	/**
-	 * Transform incoming request to request DTO, if needed.
-	 */
 	protected function transformRequest(ApiRequest $request): ApiRequest
 	{
-		// If Apitte endpoint is not provided, skip transforming.
 		/** @var Endpoint|null $endpoint */
 		$endpoint = $request->getAttribute(RequestAttributes::ATTR_ENDPOINT);
 		if ($endpoint === null) {
 			return $request;
 		}
 
-		// Validate query parameters
 		$this->queryValidator->validateQuery($request, $endpoint);
 
-		// Get incoming request entity class, if defined. Otherwise, skip transforming.
 		/** @var EndpointRequestBody|null $requestBody */
 		$requestBody = $endpoint->getRequestBody();
 		if ($requestBody === null || $requestBody->getEntity() === null) {
@@ -102,7 +92,6 @@ class JsonDispatcher extends ApitteJsonDispatcher
 		}
 
 		try {
-			// Create request DTO from incoming request, using serializer.
 			/** @var object $dto */
 			$dto = $this->serializer->deserialize(
 				$request->getBody()->getContents(),
@@ -113,7 +102,6 @@ class JsonDispatcher extends ApitteJsonDispatcher
 
 			$request = $request->withParsedBody($dto);
 
-			// Try to validate entity only if its enabled
 			$violations = $this->validator->validate($dto);
 
 			if (count($violations) > 0) {
@@ -138,15 +126,11 @@ class JsonDispatcher extends ApitteJsonDispatcher
 		return $request;
 	}
 
-	/**
-	 * Transform outgoing response data to JSON, if needed.
-	 */
 	protected function transformResponse(mixed $data, ApiResponse $response): ApiResponse
 	{
 		$response = $response->withStatus(200)
 			->withHeader('Content-Type', 'application/json; charset=utf-8');
 
-		// Serialize entity with symfony/serializer to JSON
 		$serialized = $this->serializer->serialize($data, 'json', [
 			'json_encode_options' => JSON_UNESCAPED_UNICODE,
 		]);
@@ -155,52 +139,4 @@ class JsonDispatcher extends ApitteJsonDispatcher
 
 		return $response;
 	}
-
-	private function validateQuery(ApiRequest $request, $endpoint): void
-	{
-		$controller = $endpoint->getHandler();
-		$reflectionMethod = new \ReflectionMethod($controller->getClass(), $controller->getMethod());
-		$annotations = $this->annotationReader->getMethodAnnotations($reflectionMethod);
-
-		$parametersAnnotation = null;
-		foreach ($annotations as $annotation) {
-			if ($annotation instanceof RequestParameters) {
-				$parametersAnnotation = $annotation;
-				break;
-			}
-		}
-
-		if ($parametersAnnotation !== null) {
-			$parameters = $parametersAnnotation->getParameters(); // This will return an array of RequestParameter objects
-
-			foreach ($parameters as $parameter) {
-				$activeParam = $request->getParameter($parameter->getName());
-				if ($parameter->getType() === 'DateTimeString' && $activeParam) {
-					if (!preg_match($this->getDateTimePatternFromSchema(), $activeParam)) {
-						throw ValidationException::create()
-							->withMessage('Invalid query parameter '.$parameter->getName().'. (valid example: 2025-02-05T12:34:56)')
-							->withFields([$parameter->getName()]);
-					}
-				}
-			}
-		}
-	}
-
-	private function getDateTimePatternFromSchema(): ?string
-	{
-		$reflectionClass = new ReflectionClass(DateTimeStringReqDto::class);
-
-		$reflectionProperty = $reflectionClass->getProperty('datetime');
-
-		$annotations = $this->annotationReader->getPropertyAnnotations($reflectionProperty);
-
-		foreach ($annotations as $annotation) {
-			if ($annotation instanceof Schema) {
-				 return $annotation->pattern;
-			}
-		}
-
-		return null;
-	}
-
 }
