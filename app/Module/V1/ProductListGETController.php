@@ -6,9 +6,8 @@ use Apitte\Core\Annotation\Controller as Apitte;
 use Apitte\Core\Http\ApiRequest;
 use App\Domain\Api\Facade\ProductsFacade;
 use App\Domain\Api\Facade\ProductsPriceChangeFacade;
-use App\Domain\Api\Response\ProductPriceChangeResDto;
-use App\Domain\Api\Response\ProductResDto;
-use App\Model\Utils\DateTime;
+use App\Domain\Api\Response\ProductPriceChangeResponse;
+use App\Domain\Api\Response\ProductResponse;
 use OpenApi\Annotations\OpenApi as OA;
 use Tracy\ILogger;
 
@@ -36,7 +35,7 @@ class ProductListGETController extends BaseV1Controller
 	 * 		@Apitte\RequestParameter(name="stock_min", type="int", in="query", required=false, description="Minimum required stock amount"),
 	 *      @Apitte\RequestParameter(name="stock_max", type="int", in="query", required=false, description="Maximum required stock amount"),
 	 * })
-	 * @return ProductResDto[]
+	 * @return ProductResponse[]
 	 */
 	public function index(ApiRequest $request): array
 	{

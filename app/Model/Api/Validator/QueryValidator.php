@@ -69,7 +69,7 @@ class QueryValidator
 	private function validateDateTime(string $value, RequestParameter $parameter): void
 	{
 		$pattern = $this->getSchemaProperty(DateTimeStringQuery::class, 'pattern');
-		if ($pattern !== null && preg_match($pattern, $value) !== false) {
+		if ($pattern !== null && preg_match($pattern, $value) !== 1) {
 			$this->throwValidationException($parameter, $value);
 		}
 	}

@@ -5,7 +5,7 @@ namespace App\Module\V1;
 use Apitte\Core\Annotation\Controller as Apitte;
 use Apitte\Core\Http\ApiRequest;
 use App\Domain\Api\Facade\ProductsPriceChangeFacade;
-use App\Domain\Api\Response\ProductPriceChangeResDto;
+use App\Domain\Api\Response\ProductPriceChangeResponse;
 
 /**
  * @Apitte\Path("/products")
@@ -31,7 +31,7 @@ class PriceHistoryGETController extends BaseV1Controller
 	 * 		@Apitte\RequestParameter(name="before", type="DateTimeStringQuery", in="query", required=false, description="String in DateTime format Y-m-d\TH:i:s to set as maximum date and time to which search history"),
 	 *      @Apitte\RequestParameter(name="after", type="DateTimeStringQuery", in="query", required=false, description="String in DateTime format Y-m-d\TH:i:s to set as minimum date and time from which search history"),
 	 * })
-	 * @return ProductPriceChangeResDto[]
+	 * @return ProductPriceChangeResponse[]
 	 */
 	public function history(ApiRequest $request): array
 	{

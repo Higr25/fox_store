@@ -5,7 +5,7 @@ namespace App\Domain\Api\Response;
 use Apitte\Negotiation\Http\AbstractEntity;
 use App\Model\Database\Entity\Product;
 
-final class ProductResDto extends AbstractEntity
+final class ProductResponse extends AbstractEntity
 {
 
 	public int $id;

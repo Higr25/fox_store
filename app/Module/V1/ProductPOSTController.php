@@ -7,7 +7,7 @@ use Apitte\Core\Exception\Api\ServerErrorException;
 use Apitte\Core\Http\ApiRequest;
 use Apitte\Core\Http\ApiResponse;
 use App\Domain\Api\Facade\ProductsFacade;
-use App\Domain\Api\Request\CreateProductReqDto;
+use App\Domain\Api\Request\CreateProductRequest;
 use App\Model\Database\Repository\ProductRepository;
 use Doctrine\DBAL\Exception\DriverException;
 use App\Model\Database\EntityManagerDecorator;
@@ -30,11 +30,11 @@ class ProductPOSTController extends BaseV1Controller
 	 * @Apitte\OpenApi("summary: Create new product. Maximum name length is 50 characters.")
 	 * @Apitte\Path("/create")
 	 * @Apitte\Method("POST")
-	 * @Apitte\RequestBody(entity="App\Domain\Api\Request\CreateProductReqDto")
+	 * @Apitte\RequestBody(entity="App\Domain\Api\Request\CreateProductRequest")
 	 */
 	public function index(ApiRequest $request, ApiResponse $response): ApiResponse
 	{
-		/** @var CreateProductReqDto $dto */
+		/** @var CreateProductRequest $dto */
 		$dto = $request->getParsedBody();
 
 		$product = $this->productsFacade->findOneBy(['name' => $dto->name]);

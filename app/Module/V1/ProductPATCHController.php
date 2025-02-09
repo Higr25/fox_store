@@ -8,8 +8,8 @@ use Apitte\Core\Http\ApiRequest;
 use Apitte\Core\Http\ApiResponse;
 use App\Domain\Api\Facade\ProductsFacade;
 use App\Domain\Api\Facade\ProductsPriceChangeFacade;
-use App\Domain\Api\Request\UpdateProductReqDto;
-use App\Domain\Api\Response\ProductResDto;
+use App\Domain\Api\Request\UpdateProductRequest;
+use App\Domain\Api\Response\ProductResponse;
 use Nette\Http\IResponse;
 
 /**
@@ -33,12 +33,12 @@ class ProductPATCHController extends BaseV1Controller
 	 * @Apitte\RequestParameters({
 	 * 		@Apitte\RequestParameter(name="id", type="int", in="path", required=TRUE, description="ID of product to edit.")
 	 * })
-	 * @Apitte\RequestBody(entity="App\Domain\Api\Request\UpdateProductReqDto")
+	 * @Apitte\RequestBody(entity="App\Domain\Api\Request\UpdateProductRequest")
 	 * @param ApiRequest $request
 	 */
-	public function index(ApiRequest $request): ?ProductResDto
+	public function index(ApiRequest $request): ?ProductResponse
 	{
-		/** @var UpdateProductReqDto $dto */
+		/** @var UpdateProductRequest $dto */
 		$dto = $request->getParsedBody();
 		$id = (int)$request->getParameter('id');
 

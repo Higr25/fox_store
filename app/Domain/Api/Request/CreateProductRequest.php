@@ -5,7 +5,7 @@ namespace App\Domain\Api\Request;
 use Symfony\Component\Validator\Constraints as Assert;
 
 
-final class CreateProductReqDto
+final class CreateProductRequest
 {
 
 	#[Assert\NotBlank]

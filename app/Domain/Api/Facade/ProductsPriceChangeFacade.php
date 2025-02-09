@@ -2,7 +2,7 @@
 
 namespace App\Domain\Api\Facade;
 
-use App\Domain\Api\Response\ProductPriceChangeResDto;
+use App\Domain\Api\Response\ProductPriceChangeResponse;
 use App\Model\Database\Entity\Product;
 use App\Model\Database\Entity\ProductPriceChange;
 use App\Model\Database\EntityManagerDecorator;
@@ -21,7 +21,7 @@ final class ProductsPriceChangeFacade
 	/**
 	 * @param mixed[] $criteria
 	 * @param string[] $orderBy
-	 * @return ProductPriceChangeResDto[]
+	 * @return ProductPriceChangeResponse[]
 	 */
 	public function findBy(array $criteria = [], ?array $orderBy = null, ?int $limit = null, ?int $offset = null): array
 	{
@@ -29,7 +29,7 @@ final class ProductsPriceChangeFacade
 		$result = [];
 
 		foreach ($entities as $entity) {
-			$result[] = ProductPriceChangeResDto::from($entity);
+			$result[] = ProductPriceChangeResponse::from($entity);
 		}
 
 		return $result;

@@ -2,9 +2,9 @@
 
 namespace App\Domain\Api\Facade;
 
-use App\Domain\Api\Request\CreateProductReqDto;
-use App\Domain\Api\Request\UpdateProductReqDto;
-use App\Domain\Api\Response\ProductResDto;
+use App\Domain\Api\Request\CreateProductRequest;
+use App\Domain\Api\Request\UpdateProductRequest;
+use App\Domain\Api\Response\ProductResponse;
 use App\Model\Database\Entity\Product;
 use App\Model\Database\EntityManagerDecorator;
 use Apitte\Core\Exception\Api\ValidationException;
@@ -19,7 +19,7 @@ final class ProductsFacade
 	/**
 	 * @param mixed[] $criteria
 	 * @param string[] $orderBy
-	 * @return ProductResDto[]
+	 * @return ProductResponse[]
 	 */
 	public function findBy(array $criteria = [], ?array $orderBy = null, ?int $limit = null, ?int $offset = null): array
 	{
@@ -27,7 +27,7 @@ final class ProductsFacade
 		$result = [];
 
 		foreach ($entities as $entity) {
-			$result[] = ProductResDto::from($entity);
+			$result[] = ProductResponse::from($entity);
 		}
 
 		return $result;
@@ -37,12 +37,12 @@ final class ProductsFacade
 	 * @param mixed[] $criteria
 	 * @param string[] $orderBy
 	 */
-	public function findOneBy(array $criteria, ?array $orderBy = null): ?ProductResDto
+	public function findOneBy(array $criteria, ?array $orderBy = null): ?ProductResponse
 	{
 		$product = $this->em->getRepository(Product::class)->findOneBy($criteria, $orderBy);
 
 		if ($product instanceof Product) {
-			return ProductResDto::from($product);
+			return ProductResponse::from($product);
 		}
 
 		return null;
@@ -64,7 +64,7 @@ final class ProductsFacade
 		$this->em->flush($product);
 	}
 
-	public function update(int $id, UpdateProductReqDto $dto): void
+	public function update(int $id, UpdateProductRequest $dto): void
 	{
 		$product = $this->em->getRepository(Product::class)->findOneBy(['id' => $id]);
 
@@ -92,7 +92,7 @@ final class ProductsFacade
 		$this->em->flush($product);
 	}
 
-	public function create(CreateProductReqDto $dto): void
+	public function create(CreateProductRequest $dto): void
 	{
 		$product = new Product(
 			$dto->name,

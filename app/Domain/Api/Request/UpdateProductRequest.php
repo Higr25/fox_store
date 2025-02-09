@@ -4,9 +4,8 @@ namespace App\Domain\Api\Request;
 
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
-use OpenApi\Annotations as OA;
 
-final class UpdateProductReqDto
+final class UpdateProductRequest
 {
 
 	#[Assert\Length(max: 50)]
