@@ -18,10 +18,10 @@ Api Codeception
 2. Restartovat kontejnery ``` docker-compose down / docker-compose up -d ```
 3. ``` vendor/bin/codecept run Api ```
 
-Případnou chybu ``` '/usr/bin/env: ‘php\r’: No such file or directory' ``` při spouštění testů lze opravit přes ``` dos2unix vendor/bin/codecept ``` nebo ``` dos2unix vendor/bin/phpstan ```
+Případnou CRLF chybu ``` '/usr/bin/env: ‘php\r’: No such file or directory' ``` při spouštění testů lze opravit přes ``` dos2unix vendor/bin/codecept ``` nebo ``` dos2unix vendor/bin/phpstan ```
 
 
 ## K dokončení
-Zde jsou zahrnuty všechny části, které jsem nepřidal kvůli časové náročnosti.
+Zde jsou zahrnuty všechny části, které jsem nepřidal kvůli časové náročnosti:
 
 Unit testy, Middleware testy, Bulk/Batch endpointy, CI/CD Pipeliny
