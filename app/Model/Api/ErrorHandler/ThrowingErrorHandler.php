@@ -9,9 +9,9 @@ use Apitte\Core\Http\ApiResponse;
 class ThrowingErrorHandler extends SimpleErrorHandler
 {
 
-	public function handle(DispatchError $error): ApiResponse
+	public function handle(DispatchError $dispatchError): ApiResponse
 	{
-		throw $error->getError();
+		throw $dispatchError->getError();
 	}
 
 }

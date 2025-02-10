@@ -11,43 +11,45 @@ resource:
 			paths: [%appDir%/Module]
 
 api:
-	debug: %debugMode%
+	debug: true
 	plugins:
 		Apitte\Core\DI\Plugin\CoreSchemaPlugin:
 		Apitte\Core\DI\Plugin\CoreServicesPlugin:
 		Apitte\Debug\DI\DebugPlugin:
 		Apitte\Middlewares\DI\MiddlewaresPlugin:
-			tracy: false
+#			tracy: true
 			autobasepath: true
 		Apitte\OpenApi\DI\OpenApiPlugin:
 			swaggerUi:
 				panel: true
 
 services:
-	middleware.tryCatch:
-		factory: Contributte\Middlewares\TryCatchMiddleware
+
+	middlewares.catchException:
+		factory: App\Model\Api\Middleware\CatchExceptionMiddleware()
 		tags: [middleware: [priority: 1]]
 		setup:
 			- setDebugMode(%debugMode%)
-			- setCatchExceptions(%productionMode%) # used in debug only
-			- setLogger(@Psr\Log\LoggerInterface, Psr\Log\LogLevel::ERROR)
+
 	middlewares.logging:
-		factory: Contributte\Middlewares\LoggingMiddleware
-		arguments: [@monolog.logger.default]
-		tags: [middleware: [priority: 100]]
+		factory: App\Model\Api\Middleware\RequestLoggerMiddleware
+		tags: [middleware: [priority: 10]]
+
+	middlewares.rateLimit:
+		factory: App\Model\Api\Middleware\RateLimitMiddleware(%rateLimit.limit%, %rateLimit.window%, @redisClient)
+		tags: [middleware: [priority: 20]]
+
+	middlewares.jsonValidator:
+		factory: App\Model\Api\Middleware\JsonValidatorMiddleware
+		tags: [middleware: [priority: 50]]
+
 	middleware.methodOverride:
 		factory: Contributte\Middlewares\MethodOverrideMiddleware
 		tags: [middleware: [priority: 150]]
+
 	middleware.cors:
 		factory: App\Model\Api\Middleware\CORSMiddleware
 		tags: [middleware: [priority: 200]]
-	middleware.authenticator:
-		factory: App\Model\Api\Middleware\AuthenticationMiddleware(
-			App\Model\Api\Security\TokenAuthenticator()
-		)
-		tags: [middleware: [priority: 250]]
 
 	api.core.dispatcher: App\Model\Api\Dispatcher\JsonDispatcher
 	api.core.errorHandler: App\Model\Api\ErrorHandler\ThrowingErrorHandler
-
-	- App\Module\V1\StaticController(%static.text%)

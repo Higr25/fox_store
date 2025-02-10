@@ -24,13 +24,14 @@ nettrine.dbal:
 	configuration:
 		sqlLogger: Nettrine\DBAL\Logger\PsrLogger(@Monolog\Logger)
 	connection:
-		driver: %database.driver%
-		host: %database.host%
-		user: %database.user%
-		password: %database.password%
-		dbname: %database.dbname%
-		port: %database.port%
-		serverVersion: %database.serverVersion%
+		driver: pdo_mysql
+		host: %DB_HOST%
+		user: %DB_USER%
+		password: %DB_PASS%
+		dbname: %DB_NAME%
+		port: %DB_PORT%
+		serverVersion: null
+		charset: utf8mb4
 
 nettrine.orm:
 	entityManagerDecoratorClass: App\Model\Database\EntityManagerDecorator
@@ -40,20 +41,13 @@ nettrine.orm:
 nettrine.orm.annotations:
 	mapping:
 		App\Domain: %appDir%/Domain
-
-nettrine.orm.cache:
+		App\Model\Database: %appDir%/Model/Database
 
 nettrine.migrations:
-	table: doctrine_migrations
-	column: version
 	directories:
-		migrations: %rootDir%/db/Migrations
-#	namespace: Database\Migrations
-	versionsOrganization: null
+		Database\Migrations: %rootDir%/db/Migrations
 
-nettrine.fixtures:
-	paths:
-		- %rootDir%/db/Fixtures
+nettrine.orm.cache:
 
 decorator:
 	Doctrine\Common\EventSubscriber:

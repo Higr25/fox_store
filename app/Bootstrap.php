@@ -3,40 +3,41 @@
 namespace App;
 
 use Contributte\Bootstrap\ExtraConfigurator;
+use Dotenv\Dotenv;
+use Nette\Bridges\SecurityDI\SecurityExtension;
 use Nette\DI\Compiler;
 use Tracy\Debugger;
+use Nette\Bootstrap\Configurator;
 
 class Bootstrap
 {
 
 	public static function boot(): ExtraConfigurator
 	{
+		date_default_timezone_set('Europe/Prague');
+
+		$dotenv = Dotenv::createImmutable((string)realpath(__DIR__ . '/..'), '.env');
+		$dotenv->safeLoad();
+
 		$configurator = new ExtraConfigurator();
 		$configurator->setTempDirectory(__DIR__ . '/../var/tmp');
 
-		// Disable default extensions
 		unset($configurator->defaultExtensions['security']);
 
-		$configurator->onCompile[] = function (ExtraConfigurator $configurator, Compiler $compiler): void {
-			// Add env variables to config structure
-			$compiler->addConfig(['parameters' => $configurator->getEnvironmentParameters()]);
+		$configurator->onCompile[] = function (Configurator $configurator, Compiler $compiler): void {
+			$compiler->addConfig(['parameters' => $_ENV]);
 		};
 
-		// According to NETTE_DEBUG env
 		$configurator->setEnvDebugMode();
+//		$configurator->setDebugMode(false);
+		Debugger::$showBar = false;
 
-		// Enable tracy and configure it
-		$configurator->enableTracy(__DIR__ . '/../var/log');
-		Debugger::$errorTemplate = __DIR__ . '/../resources/tracy/500.txt';
-
-		// Provide some parameters
 		$configurator->addStaticParameters([
 			'rootDir' => realpath(__DIR__ . '/..'),
 			'appDir' => __DIR__,
 			'wwwDir' => realpath(__DIR__ . '/../www'),
 		]);
 
-		// Load development or production config
 		if (getenv('NETTE_ENV', true) === 'dev') {
 			$configurator->addConfig(__DIR__ . '/../config/env/dev.neon');
 		} else {
@@ -44,6 +45,14 @@ class Bootstrap
 		}
 
 		$configurator->addConfig(__DIR__ . '/../config/local.neon');
+
+		if (isset($_ENV['ENV']) && $_ENV['ENV'] == 'test') {
+			$configurator->addConfig(__DIR__ . '/../config/env/test.neon');
+		}
+
+		$configurator->addDynamicParameters([
+			'env' => $_ENV
+		]);
 
 		return $configurator;
 	}

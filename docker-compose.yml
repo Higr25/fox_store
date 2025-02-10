@@ -1,5 +1,3 @@
-version: '3.4'
-
 services:
   nginx:
     build:
@@ -15,6 +13,8 @@ services:
     ports:
       - "8000:80"
       - "8443:443"
+    stop_grace_period: 2s
+
   php:
     build:
       context: .
@@ -22,32 +22,36 @@ services:
     volumes:
       - ./:/var/www/html:cached
     depends_on:
+      redis:
+        condition: service_started
       mariadb:
         condition: service_healthy
+    stop_grace_period: 2s
     environment:
       NETTE_DEBUG: 1
-      PHP_EXTENSION_XDEBUG: 1
-      PHP_EXTENSION_PGSQL: 1
-      PHP_EXTENSION_PDO_PGSQL: 1
-      PHP_EXTENSION_MYSQLI: 1
-      STARTUP_COMMAND_1: composer install
-#      STARTUP_COMMAND_2: NETTE_DEBUG=1 php bin/console migrations:migrate --no-interaction
-#      STARTUP_COMMAND_3: NETTE_DEBUG=1 php bin/console doctrine:fixtures:load --no-interaction
+      STARTUP_COMMAND_1: php bin/console migrations:migrate --no-interaction
 
   mariadb:
     image: mariadb:10.4
     environment:
-      - MARIADB_ROOT_PASSWORD=contributte
-      - MARIADB_PASSWORD=contributte
-      - MARIADB_USER=contributte
-      - MARIADB_DATABASE=contributte
-    volumes:
-      - .docker/data/mysql:/var/lib/mysql
+      - MARIADB_ROOT_PASSWORD=root
+      - MARIADB_PASSWORD=${DB_PASS}
+      - MARIADB_USER=${DB_USER}
+      - MARIADB_DATABASE=${DB_NAME}
     ports:
       - 3306:3306
+    stop_grace_period: 2s
+    volumes:
+      - ./.docker/mariadb/conf.d:/etc/mysql/conf.d
+#      - ./db/${ENV:-dev}:/docker-entrypoint-initdb.d
     healthcheck:
-      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost", "--silent" ]
-      interval: 3s
-      retries: 5
-      start_period: 5s
-      timeout: 3s
+      test: ["CMD", "mysql", "-u${DB_USER}", "-p${DB_PASS}", "-D${DB_NAME}", "-e", "SELECT 1"]
+      interval: 2s
+      retries: 10
+      start_period: 2s
+      timeout: 2s
+
+  redis:
+    image: redis:alpine
+    ports:
+      - "6379:6379"

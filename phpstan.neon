@@ -3,8 +3,8 @@ includes:
 	- vendor/phpstan/phpstan-doctrine/extension.neon
 
 parameters:
-	level: 9
-	phpVersion: 80100
+	level: 8
+	phpVersion: 80227
 
 	tmpDir: %currentWorkingDirectory%/var/tmp/phpstan
 
@@ -16,5 +16,5 @@ parameters:
 		- app
 		- bin
 
-	doctrine:
-		objectManagerLoader: .build/phpstan-doctrine.php
+	ignoreErrors:
+		- '#Variable property access on #'

@@ -1,17 +1,14 @@
-# Parameters
-#
 parameters:
-
-	# System
-	system:
-		error:
-			email: dev@dev.dev
-			presenter: Front:Error
-
-	static:
-		text: "This is example of static text"
-
 	database:
-		driver: pdo_pgsql
-		port: 5432
+		driver: pdo_mysql
+		port: 3306
 		serverVersion: null
+
+	rateLimit:
+		limit: 35
+		window: 10
+
+	redis:
+		scheme: tcp
+		host: redis
+		port: 6379

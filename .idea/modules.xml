@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/apitte-skeleton.iml" filepath="$PROJECT_DIR$/.idea/apitte-skeleton.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../rma/.idea/rma.iml" filepath="$PROJECT_DIR$/../rma/.idea/rma.iml" />
     </modules>
   </component>
 </project>
