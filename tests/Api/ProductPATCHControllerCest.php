@@ -31,7 +31,7 @@ class ProductPATCHControllerCest
 
 	public function testStockMod(ApiTester $I) {
 		$I->sendPATCH('/products/1/edit', [
-			'stock_mod' => -3
+			'stock_mod' => -30
 		]);
 		$I->seeResponseCodeIs(200);
 		$I->seeResponseContainsJson([

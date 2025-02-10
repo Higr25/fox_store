@@ -15,7 +15,7 @@ class ProductDELETEControllerCest
 
 		$productId = $I->grabFromDatabase('product', 'id', ['name' => 'Jablko']);
 		$I->sendDELETE("/products/$productId/delete");
-		$I->seeResponseCodeIs(204);
+		$I->seeResponseCodeIs(200);
 
 		$I->sendGet('/products');
 		$I->seeResponseCodeIs(200);

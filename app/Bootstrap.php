@@ -4,6 +4,7 @@ namespace App;
 
 use Contributte\Bootstrap\ExtraConfigurator;
 use Dotenv\Dotenv;
+use Nette\Bridges\SecurityDI\SecurityExtension;
 use Nette\DI\Compiler;
 use Tracy\Debugger;
 use Nette\Bootstrap\Configurator;
@@ -37,10 +38,6 @@ class Bootstrap
 			'wwwDir' => realpath(__DIR__ . '/../www'),
 		]);
 
-		if (isset($_ENV['env']) && $_ENV['env'] == 'test') {
-			$configurator->addConfig([__DIR__ . '/../config/env/test.neon']);
-		}
-
 		if (getenv('NETTE_ENV', true) === 'dev') {
 			$configurator->addConfig(__DIR__ . '/../config/env/dev.neon');
 		} else {
@@ -48,6 +45,10 @@ class Bootstrap
 		}
 
 		$configurator->addConfig(__DIR__ . '/../config/local.neon');
+
+		if (isset($_ENV['ENV']) && $_ENV['ENV'] == 'test') {
+			$configurator->addConfig(__DIR__ . '/../config/env/test.neon');
+		}
 
 		$configurator->addDynamicParameters([
 			'env' => $_ENV

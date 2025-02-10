@@ -25,20 +25,23 @@ class ProductDELETEController extends BaseV1Controller
 
 	/**
 	 * @Apitte\OpenApi("
-	 *   summary: Delete product.
+	 *   summary: Remove product from store.
 	 * ")
 	 * @Apitte\Path("/{id}/delete")
 	 * @Apitte\Method("DELETE")
 	 * @Apitte\RequestParameters({
 	 * 		@Apitte\RequestParameter(name="id", type="int", in="path", required=TRUE, description="ID of product to delete.")
 	 * })
+	 * @Apitte\Responses({
+	 *       @Apitte\Response(description="Product deleted", code=200)
+	 *   })
 	 */
 	public function index(ApiRequest $request, ApiResponse $response): ApiResponse
 	{
 		try {
 			$this->productsFacade->delete((int)$request->getParameter('id'));
 
-			return $response->withStatus(IResponse::S204_NoContent);
+			return $response->withStatus(IResponse::S200_OK);
 		} catch (DriverException $e) {
 			throw ServerErrorException::create()
 				->withMessage('Cannot delete product')

@@ -1,10 +1,4 @@
-includes:
-	- base.neon
-
-nettrine.cache:
-	driver: Doctrine\Common\Cache\ArrayCache
-
 parameters:
-	rateLimit:
+	rateLimit!:
 		limit: 1000
 		window: 1

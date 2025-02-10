@@ -11,6 +11,7 @@ use App\Domain\Api\Facade\ProductsPriceChangeFacade;
 use App\Domain\Api\Request\UpdateProductRequest;
 use App\Domain\Api\Response\ProductResponse;
 use Nette\Http\IResponse;
+use OpenApi\Annotations as OA;
 
 /**
  * @Apitte\Path("/products")
@@ -26,7 +27,7 @@ class ProductPATCHController extends BaseV1Controller
 
 	/**
 	 * @Apitte\OpenApi("
-	 *   summary: Edit product.
+	 *   summary: Update product in store.
 	 * ")
 	 * @Apitte\Path("/{id}/edit")
 	 * @Apitte\Method("PATCH")
@@ -34,8 +35,13 @@ class ProductPATCHController extends BaseV1Controller
 	 * 		@Apitte\RequestParameter(name="id", type="int", in="path", required=TRUE, description="ID of product to edit.")
 	 * })
 	 * @Apitte\RequestBody(entity="App\Domain\Api\Request\UpdateProductRequest")
+	 * @Apitte\Responses({
+	 *     @Apitte\Response(description="Updated Product", code=200, entity="App\Domain\Api\Response\ProductResponse"),
+	 * 	   @Apitte\Response(description="Product not found", code=404)
+	 * })
 	 * @param ApiRequest $request
 	 */
+
 	public function index(ApiRequest $request): ?ProductResponse
 	{
 		/** @var UpdateProductRequest $dto */

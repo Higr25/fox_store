@@ -5,6 +5,7 @@ namespace App\Domain\Api\Request;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
+
 final class UpdateProductRequest
 {
 

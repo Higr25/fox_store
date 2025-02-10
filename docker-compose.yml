@@ -29,6 +29,7 @@ services:
     stop_grace_period: 2s
     environment:
       NETTE_DEBUG: 1
+      STARTUP_COMMAND_1: php bin/console migrations:migrate --no-interaction
 
   mariadb:
     image: mariadb:10.4
@@ -42,7 +43,7 @@ services:
     stop_grace_period: 2s
     volumes:
       - ./.docker/mariadb/conf.d:/etc/mysql/conf.d
-      - ./db/${ENV:-dev}:/docker-entrypoint-initdb.d
+#      - ./db/${ENV:-dev}:/docker-entrypoint-initdb.d
     healthcheck:
       test: ["CMD", "mysql", "-u${DB_USER}", "-p${DB_PASS}", "-D${DB_NAME}", "-e", "SELECT 1"]
       interval: 2s

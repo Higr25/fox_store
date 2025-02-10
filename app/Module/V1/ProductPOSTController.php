@@ -8,11 +8,10 @@ use Apitte\Core\Http\ApiRequest;
 use Apitte\Core\Http\ApiResponse;
 use App\Domain\Api\Facade\ProductsFacade;
 use App\Domain\Api\Request\CreateProductRequest;
-use App\Model\Database\Repository\ProductRepository;
 use Doctrine\DBAL\Exception\DriverException;
-use App\Model\Database\EntityManagerDecorator;
 use Nette\Http\IResponse;
 use Apitte\Core\Exception\Api\ValidationException;
+use OpenApi\Attributes as OA;
 
 /**
  * @Apitte\Path("/product")
@@ -27,10 +26,14 @@ class ProductPOSTController extends BaseV1Controller
 	{}
 
 	/**
-	 * @Apitte\OpenApi("summary: Create new product. Maximum name length is 50 characters.")
+	 * @Apitte\OpenApi("summary: Create new product in store. Maximum name length is 50 characters.")
 	 * @Apitte\Path("/create")
 	 * @Apitte\Method("POST")
 	 * @Apitte\RequestBody(entity="App\Domain\Api\Request\CreateProductRequest")
+	 * @Apitte\Responses({
+	 *      @Apitte\Response(description="Product created", code=201),
+ 	 *  	@Apitte\Response(description="Product Name already exists", code=409)
+	 *  })
 	 */
 	public function index(ApiRequest $request, ApiResponse $response): ApiResponse
 	{

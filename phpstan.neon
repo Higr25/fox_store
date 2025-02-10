@@ -18,6 +18,3 @@ parameters:
 
 	ignoreErrors:
 		- '#Variable property access on #'
-
-#	doctrine:
-#		objectManagerLoader: .build/phpstan-doctrine.php

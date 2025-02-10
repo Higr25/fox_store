@@ -5,7 +5,7 @@ parameters:
 		serverVersion: null
 
 	rateLimit:
-		limit: 3
+		limit: 35
 		window: 10
 
 	redis:

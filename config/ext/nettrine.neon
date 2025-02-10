@@ -14,8 +14,8 @@ extensions:
 	nettrine.orm.console: Nettrine\ORM\DI\OrmConsoleExtension(%consoleMode%)
 	nettrine.orm.annotations: Nettrine\ORM\DI\OrmAnnotationsExtension
 
-#	nettrine.migrations: Nettrine\Migrations\DI\MigrationsExtension
-#	nettrine.fixtures: Nettrine\Fixtures\DI\FixturesExtension
+	nettrine.migrations: Nettrine\Migrations\DI\MigrationsExtension
+	nettrine.fixtures: Nettrine\Fixtures\DI\FixturesExtension
 	nettrine.cache: Nettrine\Cache\DI\CacheExtension
 
 nettrine.dbal:
@@ -42,6 +42,10 @@ nettrine.orm.annotations:
 	mapping:
 		App\Domain: %appDir%/Domain
 		App\Model\Database: %appDir%/Model/Database
+
+nettrine.migrations:
+	directories:
+		Database\Migrations: %rootDir%/db/Migrations
 
 nettrine.orm.cache:
 

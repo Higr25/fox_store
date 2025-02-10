@@ -26,7 +26,7 @@ class ProductListGETController extends BaseV1Controller
 
 	/**
 	 * @Apitte\OpenApi("
-	 *   summary: List products in store. Add
+	 *   summary: List products in store.
 	 * ")
 	 * @Apitte\Path("/")
 	 * @Apitte\Method("GET")
@@ -35,6 +35,9 @@ class ProductListGETController extends BaseV1Controller
 	 * 		@Apitte\RequestParameter(name="stock_min", type="int", in="query", required=false, description="Minimum required stock amount"),
 	 *      @Apitte\RequestParameter(name="stock_max", type="int", in="query", required=false, description="Maximum required stock amount"),
 	 * })
+	 * @Apitte\Responses({
+	 *      @Apitte\Response(description="Found products", code=200, entity="App\Domain\Api\Response\ProductResponse[]"),
+	 *  })
 	 * @return ProductResponse[]
 	 */
 	public function index(ApiRequest $request): array

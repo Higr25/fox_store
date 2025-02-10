@@ -41,4 +41,23 @@ class BaseTest extends Module
 			// continue
 		}
 	}
+
+	private function loadConfigFromAnnotation(TestInterface $test)
+	{
+		$annotations = Annotations::forTest($test);
+
+		if (isset($annotations['config'])) {
+			$configFile = $annotations['config'][0]; // Assuming the annotation holds the file name
+			$configPath = __DIR__ . "/../../config/env/{$configFile}.neon";
+
+			if (file_exists($configPath)) {
+				$neonData = file_get_contents($configPath);
+				$config = Neon::decode($neonData);
+				// You can now inject this config into your application or container
+				// Example: $this->getModule('NetteTester')->setConfig($config);
+			} else {
+				throw new \Exception("Config file {$configFile}.neon not found.");
+			}
+		}
+	}
 }

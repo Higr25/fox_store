@@ -85,7 +85,8 @@ final class ProductsFacade
 		}
 
 		if ($dto->stockMod !== null) {
-			$product->setStock($product->getStock() + $dto->stockMod);
+			$newValue = max(($product->getStock() + $dto->stockMod), 0);
+			$product->setStock($newValue);
 		}
 
 		$this->em->persist($product);
